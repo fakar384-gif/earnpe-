@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarnPe - All in One Admin Panel</title>
+    <style>
+        /* ================== গ্লোবাল স্টাইল ================== */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+        
+        /* ================== লগইন পেজ স্টাইল ================== */
+        #loginUI { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #000; }
+        .login-box { background: #111; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 4px 20px rgba(0, 255, 204, 0.1); }
+        .login-box h2 { color: #00ffcc; margin-top: 0; margin-bottom: 20px; }
+        .login-box input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; font-size: 14px; }
+        .login-box button { width: 100%; padding: 12px; background: #00ffcc; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        .login-box button:hover { background: #00ccaa; }
+        #error-msg { color: #ff4d4d; font-size: 13px; margin-top: 10px; display: none; }
+
+        /* ================== ড্যাশবোর্ড স্টাইল ================== */
+        .layout { display: none; min-height: 100vh; background-color: #0a0a0a; } 
+        
+        /* সাইডবার */
+        .sidebar { width: 250px; background-color: #111; border-right: 1px solid #333; padding: 20px 0; transition: transform 0.3s ease; z-index: 1000; }
+        .sidebar h2 { color: #00ffcc; text-align: center; margin-bottom: 30px; font-size: 22px; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar ul li { margin: 8px 15px; }
+        .sidebar ul li a { color: #ccc; text-decoration: none; font-size: 16px; display: block; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .sidebar ul li a:hover, .sidebar ul li a.active { background-color: #222; color: #00ffcc; border-left: 4px solid #00ffcc; }
+
+        /* মেইন কন্টেন্ট */
+        .main-content { flex: 1; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+        
+        /* হেডার */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background-color: #111; border-bottom: 1px solid #333; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header h3 { margin: 0; color: #00ffcc; font-size: 20px; }
+        .menu-toggle { background: #222; color: #00ffcc; border: 1px solid #333; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 20px; display: none; }
+        .logout-btn { background: #ff4d4d; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .logout-btn:hover { background: #e60000; }
+
+        /* ভিউ সেকশন */
+        .view-section { padding: 25px; display: none; }
+        .view-section.active { display: block; }
+        .view-section h2 { margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; color: #fff; margin-bottom: 20px; }
+
+        /* স্ট্যাটাস কার্ডস */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 10px; }
+        .stat-card { background: #111; padding: 25px; border-radius: 10px; border: 1px solid #333; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .stat-card h4 { margin: 0; color: #aaa; font-weight: normal; font-size: 16px; }
+        .stat-card p { margin: 10px 0 0; font-size: 32px; font-weight: bold; color: #00ffcc; }
+
+        /* ফর্ম ডিজাইন */
+        .form-container { background: #111; padding: 25px; border-radius: 10px; border: 1px solid #333; max-width: 500px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; color: #ccc; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; box-sizing: border-box; font-size: 14px; background-color: #222; color: #fff; }
+        .submit-btn { width: 100%; background-color: #00ffcc; color: #000; border: none; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .submit-btn:hover { background-color: #00ccaa; }
+        #status-msg { text-align: center; font-weight: bold; margin-top: 15px; font-size: 14px; }
+
+        /* টাস্ক ও লিড কার্ড */
+        .task-list { display: flex; flex-direction: column; gap: 15px; }
+        .admin-card { background: #111; border: 1px solid #333; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .card-logo { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-right: 15px; background: #222; }
+        .task-info-wrap { display: flex; align-items: center; }
+        .task-info h3 { margin: 0 0 5px 0; font-size: 18px; color: #fff; }
+        .task-info p { margin: 0; font-size: 13px; color: #888; }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: inline-block; margin-top: 8px; }
+        .badge.active { background: rgba(0, 255, 204, 0.2); color: #00ffcc; border: 1px solid #00ffcc; }
+        .badge.paused { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border: 1px solid #ff4d4d; }
+        .badge.pending { background: rgba(255, 204, 0, 0.2); color: #ffcc00; border: 1px solid #ffcc00; }
+        
+        .action-btns { display: flex; flex-direction: column; gap: 8px; }
+        .action-btns button { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .edit-btn { background: #ffcc00; color: #000; }
+        .pause-btn { background: #333; color: #fff; border: 1px solid #555; }
+        .approve-btn { background: #00ffcc; color: #000; }
+        .reject-btn { background: #ff4d4d; color: #fff; }
+
+        /* লোডিং স্ক্রিন */
+        #global-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #00ffcc; font-size: 18px; font-weight: bold; }
+
+        /* মোবাইল রেসপন্সিভ */
+        @media (max-width: 768px) {
+            .layout { flex-direction: column; }
+            .sidebar { position: fixed; height: 100%; transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); box-shadow: 4px 0 15px rgba(0,0,0,0.8); }
+            .menu-toggle { display: block; }
+            .view-section { padding: 15px; }
+            .admin-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .action-btns { width: 100%; flex-direction: row; }
+            .action-btns button { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="global-loader">Loading Admin Panel...</div>
+
+<div id="loginUI">
+    <div class="login-box">
+        <h2>EarnPe Admin</h2>
+        <input type="email" id="email" placeholder="Admin Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="loginBtn">Login</button>
+        <div id="error-msg">Invalid email or password!</div>
+    </div>
+</div>
+
+<div class="layout" id="adminUI">
+    
+    <div class="sidebar" id="sidebar">
+        <h2>EarnPe Pro</h2>
+        <ul>
+            <li><a class="nav-link active" data-target="view-dashboard">Dashboard Overview</a></li>
+            <li><a class="nav-link" data-target="view-add-offer">Add New Offer</a></li>
+            <li><a class="nav-link" data-target="view-notice">Important Notice</a></li>
+            <li><a class="nav-link" data-target="view-manage-leads" id="nav-manage-leads">Manage Leads</a></li>
+            <li><a class="nav-link" data-target="view-task-edit">Task Edit & Manage</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">☰</button> 
+                <h3 id="header-title">Dashboard Overview</h3>
+            </div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <div id="view-dashboard" class="view-section active">
+            <h2>Dashboard Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Users</h4>
+                    <p id="total-users">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Active Offers</h4>
+                    <p id="active-offers-count">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Pending Leads</h4>
+                    <p id="pending-leads-count">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-add-offer" class="view-section">
+            <h2>Add New App/Offer</h2>
+            <div class="form-container">
+                <form id="admin-form">
+                    <div class="form-group">
+                        <label>App/Offer Name</label>
+                        <input type="text" id="offer-name" placeholder="e.g. Kotak 811" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Logo URL</label>
+                        <input type="url" id="offer-logo" placeholder="e.g. https://example.com/logo.png" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Category</label>
+                        <select id="offer-category" required>
+                            <option value="demat">Demat Account</option>
+                            <option value="savings">Savings Account</option>
+                            <option value="loan">Loan</option>
+                            <option value="investment">Investment</option>
+                            <option value="credit-card">Credit Card</option>
+                            <option value="crypto">Crypto</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="offer-desc" rows="3" placeholder="e.g. Open a zero balance savings account." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>App/Offer Link (URL)</label>
+                        <input type="url" id="offer-link" placeholder="e.g. https://play.google.com/..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Reward Amount (₹)</label>
+                        <input type="number" id="offer-amount" placeholder="e.g. 300" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Coin Amount</label>
+                        <input type="number" id="offer-coin" placeholder="e.g. 300" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Publish to App</button>
+                </form>
+                <div id="status-msg"></div>
+            </div>
+        </div>
+
+        <div id="view-notice" class="view-section">
+            <h2>Manage App Notice</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Notice Message</label>
+                    <textarea id="noticeInput" rows="4" placeholder="এখানে নতুন নোটিশটি লিখুন..."></textarea>
+                </div>
+                <button onclick="saveNotice()" class="submit-btn">Publish Notice</button>
+            </div>
+        </div>
+
+        <div id="view-manage-leads" class="view-section">
+            <h2>Manage Pending Leads</h2>
+            <p style="color: #888; font-size: 14px; margin-bottom: 20px;">Review user submissions below. Approve to credit rewards or Reject if invalid.</p>
+            <div class="task-list" id="leads-list">
+                <p style="text-align: center; color: #888;">Loading leads...</p>
+            </div>
+        </div>
+
+        <div id="view-task-edit" class="view-section">
+            <h2>Active & Paused Tasks</h2>
+            <div class="task-list" id="adminTasksList">
+                <p style="text-align:center; color:#888;">Loading Tasks...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // UI Navigation & Sidebar Logic
+    // ============================================
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const viewSections = document.querySelectorAll('.view-section');
+    const headerTitle = document.getElementById('header-title');
+
+    menuToggle.addEventListener('click', (e) => {
+        sidebar.classList.toggle('show');
+        e.stopPropagation();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && sidebar.classList.contains('show')) {
+            if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                sidebar.classList.remove('show');
+            }
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            viewSections.forEach(v => v.classList.remove('active'));
+
+            link.classList.add('active');
+            const targetId = link.getAttribute('data-target');
+            document.getElementById(targetId).classList.add('active');
+            headerTitle.innerText = link.innerText;
+
+            if (window.innerWidth <= 768) { sidebar.classList.remove('show'); }
+        });
+    });
+</script>
+
+<script type="module">
+    // ============================================
+    // Firebase Logic (Auth & Database)
+    // ============================================
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, query, where, getCountFromServer, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+        authDomain: "earnpe-ca9d8.firebaseapp.com",
+        projectId: "earnpe-ca9d8",
+        storageBucket: "earnpe-ca9d8.firebasestorage.app",
+        messagingSenderId: "305792608968",
+        appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const globalLoader = document.getElementById('global-loader');
+    const loginUI = document.getElementById('loginUI');
+    const adminUI = document.getElementById('adminUI');
+
+    // === রিয়েল ইউজার কাউন্ট ফাংশন ===
+    async function updateRealUserCount() {
+        try {
+            const coll = collection(db, "users"); 
+            const snapshot = await getCountFromServer(coll);
+            document.getElementById('total-users').innerText = snapshot.data().count;
+        } catch (e) {
+            console.log("Count error: ", e);
+            document.getElementById('total-users').innerText = "0";
+        }
+    }
+
+    // === ১. অথেন্টিকেশন ===
+    onAuthStateChanged(auth, (user) => {
+        globalLoader.style.display = "none"; 
+        if (user) {
+            loginUI.style.display = "none";
+            adminUI.style.display = "flex";
+            loadAllTasks(); 
+            loadPendingLeads(); 
+            updateRealUserCount(); 
+        } else {
+            adminUI.style.display = "none";
+            loginUI.style.display = "flex";
+        }
+    });
+
+    // === লগইন/লগআউট ===
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('error-msg');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        loginBtn.innerText = "Logging in...";
+        errorMsg.style.display = "none";
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => { loginBtn.innerText = "Login"; })
+            .catch(() => { errorMsg.style.display = "block"; loginBtn.innerText = "Login"; });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        document.getElementById('logoutBtn').innerText = "Wait...";
+        signOut(auth).then(() => { document.getElementById('logoutBtn').innerText = "Logout"; });
+    });
+
+    // === Add New Offer ===
+    const form = document.getElementById('admin-form');
+    const statusMsg = document.getElementById('status-msg');
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusMsg.style.color = "#00ffcc";
+            statusMsg.innerText = "Uploading to Database...";
+
+            try {
+                await addDoc(collection(db, "offers"), {
+                    name: document.getElementById('offer-name').value,
+                    logo: document.getElementById('offer-logo').value,
+                    category: document.getElementById('offer-category').value, 
+                    description: document.getElementById('offer-desc').value,
+                    link: document.getElementById('offer-link').value,
+                    amount: Number(document.getElementById('offer-amount').value),
+                    coin: Number(document.getElementById('offer-coin').value),
+                    status: "active"
+                });
+
+                statusMsg.style.color = "#00ffcc";
+                statusMsg.innerText = "Success! Offer added.";
+                form.reset(); 
+                loadAllTasks(); 
+            } catch (error) {
+                statusMsg.style.color = "#ff4d4d";
+                statusMsg.innerText = "Error uploading data!";
+            }
+        });
+    }
+
+    // === Publish GLOBAL Notice to Firebase ===
+    window.saveNotice = async function() {
+        const noticeInput = document.getElementById("noticeInput");
+        const notice = noticeInput.value;
+        
+        if(notice.trim() === "") { 
+            alert("দয়া করে কিছু টেক্সট লিখুন!"); 
+            return; 
+        }
+
+        try {
+            await addDoc(collection(db, "notifications"), {
+                message: notice.trim(),
+                type: "global", // গ্লোবাল নোটিশ হিসেবে সেভ হবে
+                createdAt: new Date()
+            });
+            
+            alert("Notice Published Successfully to Firebase Database!");
+            noticeInput.value = ""; 
+        } catch (error) {
+            alert("Error publishing notice: " + error.message);
+        }
+    };
+
+    // === Task Edit & Manage ===
+    async function loadAllTasks() {
+        const tasksList = document.getElementById('adminTasksList');
+        const activeCountDisplay = document.getElementById('active-offers-count');
+        
+        try {
+            const querySnapshot = await getDocs(collection(db, "offers"));
+            tasksList.innerHTML = "";
+            let activeOfferCount = 0;
+
+            if(querySnapshot.empty) {
+                tasksList.innerHTML = "<p style='text-align:center; color:#888;'>No tasks found.</p>";
+                activeCountDisplay.innerText = "0";
+                return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                const currentStatus = data.status || "active"; 
+                const isPaused = currentStatus === "paused";
+                const logoImg = data.logo ? `<img src="${data.logo}" class="card-logo">` : `<div class="card-logo" style="display:flex; justify-content:center; align-items:center; font-size:10px;">No Logo</div>`;
+                
+                if(!isPaused) { activeOfferCount++; }
+                
+                const statusBadge = isPaused ? `<span class="badge paused">PAUSED</span>` : `<span class="badge active">ACTIVE</span>`;
+                const toggleBtnText = isPaused ? "Activate" : "Pause";
+
+                tasksList.innerHTML += `
+                <div class="admin-card">
+                    <div class="task-info-wrap">
+                        ${logoImg}
+                        <div class="task-info">
+                            <h3>${data.name}</h3>
+                            <p>Category: ${data.category} | Reward: ₹${data.amount}</p>
+                            ${statusBadge}
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button class="pause-btn" onclick="toggleStatus('${id}', '${currentStatus}')">${toggleBtnText}</button>
+                        <button class="edit-btn" onclick="window.location.href='edit-task.html?id=${id}'">Edit</button>
+                    </div>
+                </div>`;
+            });
+            activeCountDisplay.innerText = activeOfferCount;
+        } catch (error) {
+            tasksList.innerHTML = "<p style='color:red;'>Error loading tasks!</p>";
+        }
+    }
+
+    window.toggleStatus = async function(id, currentStatus) {
+        const newStatus = currentStatus === "active" ? "paused" : "active";
+        try {
+            await updateDoc(doc(db, "offers", id), { status: newStatus });
+            loadAllTasks(); 
+        } catch (error) { alert("Error updating status: " + error.message); }
+    }
+
+    // ============================================
+    // MANAGE LEADS & USER BALANCE UPDATE LOGIC
+    // ============================================
+    async function loadPendingLeads() {
+        const leadsList = document.getElementById('leads-list');
+        const pendingCountDisplay = document.getElementById('pending-leads-count');
+        
+        try {
+            const q = query(collection(db, "leads"), where("status", "==", "pending"));
+            const querySnapshot = await getDocs(q);
+            
+            leadsList.innerHTML = "";
+            let pendingCount = 0;
+
+            if(querySnapshot.empty) {
+                leadsList.innerHTML = "<p style='text-align:center; color:#888;'>No pending leads right now. Great job!</p>";
+                pendingCountDisplay.innerText = "0";
+                return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+                pendingCount++;
+                const data = docSnap.data();
+                const leadId = docSnap.id;
+                
+                const proofImageLink = data.screenshotUrl 
+                    ? `<p style="margin-top: 8px;"><a href="${data.screenshotUrl}" target="_blank" style="color: #00ffcc; text-decoration: none; border: 1px solid #00ffcc; padding: 4px 8px; border-radius: 4px; font-size: 12px; display: inline-block;">🖼️ View Screenshot</a></p>` 
+                    : `<p style="color: #ff4d4d; font-size: 12px; margin-top: 5px;">No Screenshot</p>`;
+                
+                leadsList.innerHTML += `
+                <div class="admin-card" id="lead-${leadId}">
+                    <div class="task-info-wrap" style="flex-direction: column; align-items: flex-start; gap: 5px; width: 100%;">
+                        <div class="task-info" style="width: 100%;">
+                            <h3>Offer: ${data.offerName || "Unknown Offer"}</h3>
+                            <p style="color: #aaa; margin-top: 5px;"><strong>User Proof:</strong> ${data.submittedProof || "No proof provided"}</p>
+                            <p style="color: #aaa;"><strong>User ID:</strong> ${data.userId || "Unknown"}</p>
+                            ${proofImageLink}
+                            <div style="margin-top: 10px;"><span class="badge pending">PENDING</span></div>
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button class="approve-btn" onclick="updateLeadStatus('${leadId}', 'approved', '${data.userId}', ${data.amount || 0}, ${data.coin || 0})">Approve</button>
+                        <button class="reject-btn" onclick="updateLeadStatus('${leadId}', 'rejected', '${data.userId}', 0, 0)">Reject</button>
+                    </div>
+                </div>`;
+            });
+            pendingCountDisplay.innerText = pendingCount;
+        } catch (error) {
+            leadsList.innerHTML = "<p style='text-align:center; color:red;'>Failed to load leads. Create a 'leads' collection first!</p>";
+            console.error(error);
+        }
+    }
+
+    // === Update Lead Status and Add User Balance + Personal Notice ===
+    window.updateLeadStatus = async function(leadId, newStatus, userId, amount, coin) {
+        const isConfirmed = confirm(`Are you sure you want to ${newStatus} this lead?`);
+        if(!isConfirmed) return;
+
+        try {
+            await updateDoc(doc(db, "leads", leadId), { 
+                status: newStatus,
+                updatedAt: new Date()
+            });
+
+            if(newStatus === 'approved') {
+                const userRef = doc(db, "users", userId);
+                
+                await setDoc(userRef, {
+                    balance: increment(amount),         
+                    coins: increment(coin),             
+                    confirmLeads: increment(1)          
+                }, { merge: true });
+
+                // পার্সোনাল নোটিশ পাঠানো (Approve)
+                await addDoc(collection(db, "notifications"), {
+                    message: `Congratulations! Your task has been approved. ₹${amount} and ${coin} Coins added to your account.`,
+                    type: "personal",
+                    userId: userId,
+                    createdAt: new Date()
+                });
+
+                alert(`Lead Approved & Personal Notice sent! ₹${amount} and ${coin} Coins securely added to User (${userId}).`);
+            } 
+            else {
+                const userRef = doc(db, "users", userId);
+                await setDoc(userRef, {
+                    rejectedLeads: increment(1)         
+                }, { merge: true });
+
+                // পার্সোনাল নোটিশ পাঠানো (Reject)
+                await addDoc(collection(db, "notifications"), {
+                    message: `Sorry, your recent task submission was rejected. Please check the proof requirements and try again.`,
+                    type: "personal",
+                    userId: userId,
+                    createdAt: new Date()
+                });
+
+                alert(`Lead Rejected & Personal Notice sent!`);
+            }
+
+            loadPendingLeads(); 
+        } catch (error) {
+            alert("Error updating lead: " + error.message);
+        }
+    }
+
+    document.getElementById('nav-manage-leads').addEventListener('click', loadPendingLeads);
+
+</script>
+
+</body>
+</html>

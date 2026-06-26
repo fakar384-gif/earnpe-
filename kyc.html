@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete KYC - EarnPe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .app-container { max-width: 500px; margin: 0 auto; background-color: #0a0a0a; min-height: 100vh; padding-bottom: 30px; }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: #111;
+            border-bottom: 1px solid #333;
+        }
+        .back-btn { color: #00ffcc; text-decoration: none; font-size: 20px; margin-right: 15px; font-weight: bold; }
+        .page-header h2 { margin: 0; font-size: 18px; }
+
+        .info-text { padding: 20px; color: #ccc; font-size: 14px; text-align: center; line-height: 1.5; }
+        .info-text span { color: #00ffcc; font-weight: bold; }
+
+        /* Form */
+        .kyc-form { padding: 0 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: #888; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; background: #111; border: 1px solid #333; border-radius: 8px;
+            color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #00ffcc; }
+        
+        /* Aadhaar Verification Field */
+        .aadhaar-group { display: flex; gap: 10px; }
+        .aadhaar-group input { flex: 1; }
+        .verify-btn {
+            background: #ffcc00; color: #000; border: none; padding: 0 20px;
+            border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
+        .verify-btn:hover { background: #e6b800; }
+        .verify-btn.verified-success {
+            background: rgba(0, 255, 204, 0.2); color: #00ffcc; border: 1px solid #00ffcc; pointer-events: none;
+        }
+
+        .submit-btn {
+            width: 100%; background: #00ffcc; color: #000; border: none; padding: 15px;
+            border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s;
+        }
+        .submit-btn:hover { background: #00ccaa; }
+        .submit-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="account.html" class="back-btn">❮</a>
+        <h2>Complete Your KYC</h2>
+    </div>
+
+    <div class="info-text">
+        Please fill in your correct details and verify your Aadhaar via OTP to unlock <span>withdrawals</span>.
+    </div>
+
+    <form class="kyc-form" id="kycForm">
+        <div class="form-group">
+            <label>PAN Card Number</label>
+            <input type="text" id="pan" placeholder="e.g. ABCDE1234F" required style="text-transform: uppercase;" maxlength="10">
+        </div>
+        
+        <div class="form-group">
+            <label>Aadhaar Number (12 Digits)</label>
+            <div class="aadhaar-group">
+                <input type="number" id="aadhaar" placeholder="Enter 12-digit number" required>
+                <button type="button" id="aadhaarVerifyBtn" class="verify-btn" onclick="verifyAadhaarOTP()">Verify</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" id="dob" required>
+        </div>
+        <div class="form-group">
+            <label>Occupation</label>
+            <select id="occupation" required>
+                <option value="">Select Occupation</option>
+                <option value="STUDENT">Student</option>
+                <option value="SALARIED">Salaried</option>
+                <option value="BUSINESS">Business</option>
+                <option value="SELF EMPLOYED">Self Employed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Full Address</label>
+            <textarea id="address" rows="3" placeholder="House No, Area, City, State, Pincode" required style="text-transform: uppercase;"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="finalSubmitBtn" disabled>Submit KYC Details</button>
+    </form>
+</div>
+
+<script>
+    let isAadhaarVerified = false;
+
+    // আধার OTP ভেরিফিকেশন লজিক
+    function verifyAadhaarOTP() {
+        const aadhaarInput = document.getElementById("aadhaar").value;
+        
+        // চেক করবে আধার নম্বর ১২ ডিজিটের কি না
+        if(aadhaarInput.length === 12) {
+            // আধারের জন্য ৬ ডিজিটের OTP তৈরি করা
+            let generatedOTP = Math.floor(100000 + Math.random() * 900000); 
+            
+            // ডেমো পারপাস: ইউজারকে OTP দেখিয়ে দেওয়া হচ্ছে যাতে সে টেস্ট করতে পারে
+            let userOtp = prompt(`UIDAI সার্ভার থেকে আপনার লিঙ্ক করা মোবাইল নম্বরে একটি OTP পাঠানো হয়েছে।\n\n(ডেমো OTP: ${generatedOTP})\n\nদয়া করে 6-ডিজিটের OTP টি এখানে লিখুন:`);
+            
+            if(userOtp == generatedOTP) {
+                isAadhaarVerified = true;
+                
+                // বাটনটিকে সবুজ Verified ব্যাজে পরিবর্তন করা
+                const btn = document.getElementById("aadhaarVerifyBtn");
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Verified';
+                btn.className = "verify-btn verified-success";
+                
+                // আধার ইনপুট লক করে দেওয়া
+                document.getElementById("aadhaar").readOnly = true; 
+                
+                // সাবমিট বাটন আনলক করে দেওয়া
+                document.getElementById("finalSubmitBtn").disabled = false;
+                
+                alert("Aadhaar Verified Successfully via UIDAI!");
+            } else if (userOtp) {
+                alert("ভুল OTP! ভেরিফিকেশন ব্যর্থ হয়েছে।");
+            }
+        } else {
+            alert("অনুগ্রহ করে সঠিক ১২ ডিজিটের আধার নম্বর দিন!");
+        }
+    }
+
+    // ফর্ম সাবমিশন লজিক
+    document.getElementById("kycForm").addEventListener("submit", function(e) {
+        e.preventDefault(); 
+
+        if(!isAadhaarVerified) {
+            alert("Please verify your Aadhaar with OTP before submitting!");
+            return;
+        }
+
+        // ফর্মের ডেটাগুলো মেমোরিতে সেভ করা
+        localStorage.setItem("kycAadhaar", "XXXXXXXX" + document.getElementById("aadhaar").value.slice(-4));
+        localStorage.setItem("kycPan", document.getElementById("pan").value.toUpperCase());
+        localStorage.setItem("kycGender", document.getElementById("gender").value);
+        localStorage.setItem("kycDob", document.getElementById("dob").value);
+        localStorage.setItem("kycOcc", document.getElementById("occupation").value);
+        localStorage.setItem("kycAddr", document.getElementById("address").value.toUpperCase());
+        
+        // স্ট্যাটাস Verified করে দেওয়া
+        localStorage.setItem("kycVerified", "true");
+
+        alert("KYC Details Submitted Successfully!");
+        window.location.href = "account.html"; // আবার অ্যাকাউন্ট পেজে পাঠিয়ে দেওয়া
+    });
+</script>
+<script src="language.js"></script>
+</body>
+</html>

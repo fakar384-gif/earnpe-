@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - EarnPe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px 0;}
+        .auth-container { background: linear-gradient(135deg, #111, #1c1c1c); width: 100%; max-width: 400px; padding: 40px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1); border: 1px solid #333; text-align: center; box-sizing: border-box; }
+        
+        .logo-text { font-size: 35px; font-weight: 900; color: #00ffcc; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 14px; margin-bottom: 30px; }
+
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888; font-size: 16px; transition: 0.3s;}
+        .input-group input { width: 100%; background: #0a0a0a; border: 1px solid #333; color: #fff; padding: 15px 15px 15px 45px; border-radius: 10px; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .input-group input:focus { border-color: #00ffcc; }
+        .input-group input:focus + i { color: #00ffcc; }
+
+        .auth-btn { background: #00ffcc; color: #000; border: none; width: 100%; padding: 15px; font-weight: bold; font-size: 18px; border-radius: 30px; cursor: pointer; transition: 0.3s; margin-top: 10px;}
+        .auth-btn:hover { background: #00ccaa; transform: translateY(-2px); }
+
+        .switch-page { margin-top: 25px; font-size: 14px; color: #888; }
+        .switch-page a { color: #00ffcc; text-decoration: none; font-weight: bold; }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="logo-text">EarnPe</div>
+    <div class="subtitle">Create an account to start earning</div>
+
+    <form onsubmit="handleSignup(event)">
+        <div class="input-group">
+            <input type="text" id="name" placeholder="Full Name" required>
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="tel" id="mobile" placeholder="Mobile Number" required>
+            <i class="fa-solid fa-phone"></i>
+        </div>
+        
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="refercode" placeholder="Referral Code (Optional)">
+            <i class="fa-solid fa-gift"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Create Password" required>
+            <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <button type="submit" class="auth-btn">CREATE ACCOUNT</button>
+    </form>
+
+    <div class="switch-page">
+        Already have an account? <a href="login.html">Login</a>
+    </div>
+</div>
+
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+        authDomain: "earnpe-ca9d8.firebaseapp.com",
+        projectId: "earnpe-ca9d8",
+        storageBucket: "earnpe-ca9d8.firebasestorage.app",
+        messagingSenderId: "305792608968",
+        appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+    };
+
+    // Firebase Initialize করা
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    window.handleSignup = async function(e) {
+        e.preventDefault(); 
+        
+        const btn = document.querySelector('.auth-btn');
+        const name = document.getElementById('name').value;
+        const mobile = document.getElementById('mobile').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const referCode = document.getElementById('refercode').value;
+
+        // Firebase Auth এর জন্য মোবাইলকে ইমেইল ফরমেটে কনভার্ট
+        const authEmail = mobile + "@earnpe.com";
+
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
+        btn.disabled = true;
+
+        try {
+            // ১. ইউজার তৈরি করা
+            const userCredential = await auth.createUserWithEmailAndPassword(authEmail, password);
+            const user = userCredential.user;
+
+            // ২. Firestore এ ইউজারের প্রোফাইল তৈরি করা
+            await db.collection("users").doc(user.uid).set({
+                name: name,
+                mobile: mobile,
+                email: email,
+                referCode: referCode,
+                balance: 0,
+                coins: 0,
+                confirmLeads: 0,
+                pendingLeads: 0,
+                rejectedLeads: 0,
+                expiredLeads: 0,
+                createdAt: new Date()
+            });
+
+            localStorage.setItem("userName", name);
+            alert("Account created successfully! Please login.");
+            window.location.href = "login.html";
+
+        } catch (error) {
+            alert("Signup Failed: " + error.message);
+            btn.innerHTML = 'CREATE ACCOUNT';
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

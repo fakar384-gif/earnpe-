@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer & Earn - Earning App</title>
+    <link rel="stylesheet" href="demat-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .refer-container { padding: 20px; text-align: center; }
+        
+        /* 3D Gift Icon Animation */
+        .hero-icon { font-size: 70px; margin-bottom: 10px; animation: bounce 2s infinite; }
+        @keyframes bounce { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        
+        .title { color: #00ffcc; font-size: 24px; margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 14px; margin-bottom: 30px; line-height: 1.5; }
+
+        /* Referral Code Box */
+        .code-box {
+            background: #1c1c1c; border: 1px dashed #00ffcc; border-radius: 10px;
+            padding: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .code-box span { font-size: 20px; font-weight: bold; letter-spacing: 2px; color: #fff; }
+        .copy-btn { 
+            background: #333; color: #00ffcc; border: none; padding: 8px 15px; 
+            border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+
+        /* Magical Share Button */
+        .share-btn {
+            background: #00ffcc; color: #000; border: none; width: 100%; padding: 15px;
+            font-weight: bold; font-size: 18px; border-radius: 30px; cursor: pointer; margin-bottom: 30px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-row { display: flex; gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #1c1c1c; border-radius: 10px; padding: 15px; flex: 1; text-align: center; border: 1px solid #333;}
+        .stat-card h4 { margin: 0; color: #888; font-size: 12px; margin-bottom: 5px; text-transform: uppercase;}
+        .stat-card p { margin: 0; color: #00ffcc; font-size: 20px; font-weight: bold; }
+
+        /* How it works */
+        .steps-container { text-align: left; background: #0a0a0a; border: 1px solid #333; padding: 20px; border-radius: 10px; }
+        .steps-container h3 { margin-top: 0; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 16px;}
+        .step { display: flex; align-items: flex-start; margin-top: 15px; }
+        .step-num { 
+            background: #00ffcc; color: #000; width: 25px; height: 25px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; 
+        }
+        .step-text h4 { margin: 0 0 5px 0; color: #fff; font-size: 15px;}
+        .step-text p { margin: 0; color: #888; font-size: 12px; line-height: 1.4;}
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="index.html" class="back-btn" style="text-decoration: none;">❮</a>
+        <h2>Refer & Earn</h2>
+    </div>
+
+    <div class="refer-container">
+        <div class="hero-icon">🎁</div>
+        <h1 class="title">Refer & Earn ₹50</h1>
+        <p class="subtitle">Invite your friends to the app and earn flat ₹50 when they complete their first task!</p>
+
+        <div class="code-box">
+            <span id="referCode">OCMC1JB1QH</span>
+            <button class="copy-btn" onclick="copyCode()">
+                <i class="fa-regular fa-copy"></i> Copy
+            </button>
+        </div>
+
+        <button class="share-btn" onclick="shareApp()">
+            <i class="fa-solid fa-share-nodes"></i> SHARE NOW
+        </button>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <h4>Total Invites</h4>
+                <p>0</p>
+            </div>
+            <div class="stat-card">
+                <h4>Earned</h4>
+                <p>₹ 0</p>
+            </div>
+        </div>
+
+        <div class="steps-container">
+            <h3>How it works?</h3>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <h4>Share your link</h4>
+                    <p>Share your referral code or link with friends via WhatsApp or any platform.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <h4>Friend registers</h4>
+                    <p>Your friend signs up using your unique referral code.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <h4>You get rewarded</h4>
+                    <p>Once they complete a task, ₹50 is instantly added to your wallet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Copy Code Function
+    function copyCode() {
+        const code = document.getElementById('referCode').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            const copyBtn = document.querySelector('.copy-btn');
+            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            copyBtn.style.color = '#fff';
+            
+            // 2 সেকেন্ড পর আবার আগের মতো হয়ে যাবে
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+                copyBtn.style.color = '#00ffcc';
+            }, 2000);
+        });
+    }
+
+    // Web Share API Function (WhatsApp, Facebook etc.)
+    function shareApp() {
+        const referCode = document.getElementById('referCode').innerText;
+        
+        // এখানে আপনার মেসেজ এবং ওয়েবসাইটের লিংক দিন
+        const shareText = `Hey! Download this awesome earning app and make money daily. \n\nUse my referral code: *${referCode}* to get a signup bonus! \n\nDownload Now: https://your-website.com`;
+
+        if (navigator.share) {
+            // যদি ব্রাউজার শেয়ার সাপোর্ট করে (মোবাইলে)
+            navigator.share({
+                title: 'Earn Money App',
+                text: shareText,
+            }).then(() => {
+                console.log('Successfully shared');
+            }).catch(console.error);
+        } else {
+            // যদি শেয়ার সাপোর্ট না করে (কম্পিউটারে), তাহলে মেসেজটা কপি হয়ে যাবে
+            navigator.clipboard.writeText(shareText);
+            alert('Referral message copied! Paste it anywhere to share.');
+        }
+    }
+</script>
+<script src="language.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - EarnPe</title>
+    <style>
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .header { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 15px; 
+        }
+        .header a { 
+            color: #00ffcc; 
+            text-decoration: none; 
+            font-size: 18px; 
+            margin-right: 15px; 
+        }
+        .header h2 { 
+            margin: 0; 
+            color: #fff; 
+            font-size: 22px; 
+        }
+        
+        .noti-box { 
+            background: #1c1c1c; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            border-left: 5px solid #00ffcc; 
+            color: #fff;
+            line-height: 1.5;
+        }
+        .noti-date {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .empty-msg { 
+            color: #888; 
+            font-size: 16px; 
+            text-align: center;
+            margin-top: 30px;
+        }
+        .loader {
+            color: #00ffcc;
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <a href="javascript:history.back()">❮ Back</a>
+        <h2>Notifications</h2>
+    </div>
+    
+    <div id="notification-list">
+        <div class="loader">Loading notifications...</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+            authDomain: "earnpe-ca9d8.firebaseapp.com",
+            projectId: "earnpe-ca9d8",
+            storageBucket: "earnpe-ca9d8.firebasestorage.app",
+            messagingSenderId: "305792608968",
+            appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        async function fetchNotifications(user) {
+            const list = document.getElementById('notification-list');
+            try {
+                const userId = user ? user.uid : "guest";
+                
+                // কোনো জটিল শর্ত ছাড়া শুধু সময় অনুযায়ী সব মেসেজ নিয়ে আসা হচ্ছে
+                const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                list.innerHTML = ""; 
+                let hasNotifications = false;
+
+                if (querySnapshot.empty) {
+                    list.innerHTML = "<p class='empty-msg'>No new notifications at this moment.</p>";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    // জাভাস্ক্রিপ্ট দিয়ে ফিল্টার করা হচ্ছে (শুধুমাত্র গ্লোবাল এবং এই ইউজারের পার্সোনাল মেসেজ দেখাবে)
+                    if (data.type === "global" || data.userId === userId) {
+                        hasNotifications = true;
+                        
+                        let dateText = "Just now";
+                        if(data.createdAt) {
+                            const dateObj = data.createdAt.toDate();
+                            dateText = dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString();
+                        }
+
+                        list.innerHTML += `
+                            <div class="noti-box">
+                                <span class="noti-date">${dateText}</span>
+                                <div>${data.message}</div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // যদি ফিল্টার করার পর কোনো মেসেজ না পাওয়া যায়
+                if (!hasNotifications) {
+                    list.innerHTML = "<p class='empty-msg'>No new notifications at this moment.</p>";
+                }
+
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+                list.innerHTML = `<p class='empty-msg' style='color:#ff4d4d;'>Failed to load notifications: ${error.message}</p>`;
+            }
+        }
+
+        // ইউজার লগইন চেক হওয়ার পর মেসেজ লোড হবে
+        onAuthStateChanged(auth, (user) => {
+            fetchNotifications(user);
+        });
+    </script>
+</body>
+</html>

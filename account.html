@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - EarnPe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- EmailJS API Script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("omFQ9aYBwHcXij_ID"); 
+        })();
+    </script>
+
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .app-container { max-width: 500px; margin: 0 auto; background-color: #0a0a0a; min-height: 100vh; padding-bottom: 30px; }
+
+        /* Header */
+        .page-header { display: flex; align-items: center; padding: 20px; background: #111; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 10; }
+        .back-btn { color: #00ffcc; text-decoration: none; font-size: 20px; margin-right: 15px; font-weight: bold; }
+        .page-header h2 { margin: 0; font-size: 18px; }
+
+        /* Profile Section */
+        .profile-section { text-align: center; padding: 30px 20px 20px; }
+        .avatar { font-size: 50px; background: #1c1c1c; width: 90px; height: 90px; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 2px solid #00ffcc; box-shadow: 0 5px 15px rgba(0, 255, 204, 0.2); }
+        .profile-section h3 { margin: 0; font-size: 20px; letter-spacing: 1px; color: #fff; }
+
+        /* Details Container */
+        .details-container { padding: 0 20px 20px; display: grid; gap: 10px; }
+        .detail-card { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .label { color: #888; }
+        .value { font-weight: bold; }
+        .purple-text { color: #b366ff; }
+        .badge { font-size: 10px; font-weight: bold; padding: 5px 10px; border-radius: 12px; transition: 0.3s; }
+        .verified { background: rgba(0, 255, 204, 0.1); color: #00ffcc; border: 1px solid #00ffcc; }
+        .unverified { background: rgba(255, 51, 51, 0.1); color: #ff3333; border: 1px solid #ff3333; cursor: pointer; }
+        .unverified:hover { background: #ff3333; color: #fff; }
+
+        /* Section Titles & Menu Boxes */
+        .section-title { padding: 20px 20px 10px; font-size: 12px; color: #666; font-weight: bold; letter-spacing: 1px; }
+        .menu-box { background: #111; margin: 0 20px; border-radius: 12px; border: 1px solid #333; overflow: hidden; }
+        .menu-item { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #aaa; transition: 0.3s; cursor: pointer; }
+        .menu-item:hover { background: #1a1a1a; }
+        .border-bottom { border-bottom: 1px solid #333; }
+        .left-content { display: flex; align-items: center; gap: 10px; color: #ccc; }
+        .icon { font-size: 16px; width: 25px; text-align: center; }
+        .arrow { color: #555; font-size: 12px; }
+        .text-white { color: #fff; font-weight: bold; }
+        .address-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .address-text { color: #fff; font-size: 12px; line-height: 1.5; padding-left: 35px; }
+        a { text-decoration: none; color: inherit; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="index.html" class="back-btn">❮</a>
+        <h2>My Account</h2>
+    </div>
+
+    <div class="profile-section">
+        <div class="avatar">👨🏻‍🦰</div>
+        <h3 id="profileName">USER</h3>
+    </div>
+
+    <div class="details-container">
+        <div class="detail-card">
+            <span class="label">Registration Code</span>
+            <span class="value purple-text">OCMC1JB1QH</span>
+        </div>
+        
+        <div class="detail-card">
+            <span class="value text-white" id="mobileText">Add Mobile (WhatsApp)</span>
+            <span class="badge unverified" id="mobileBadge" onclick="sendWhatsAppOTP()">UNVERIFIED</span>
+        </div>
+        
+        <div class="detail-card">
+            <span class="value text-white" id="emailText">Add Email Address</span>
+            <span class="badge unverified" id="emailBadge" onclick="sendEmailOTP()">UNVERIFIED</span>
+        </div>
+        
+        <!-- এই অংশটি ঠিক করা হয়েছে -->
+        <div class="detail-card">
+            <span class="label">KYC Status</span>
+            <span class="badge unverified" id="kycBadge" onclick="window.location.href='kyc.html'">PENDING</span>
+        </div>
+    </div>
+
+    <div class="section-title">CONFIGURATION</div>
+    <div class="menu-box">
+        <div class="menu-item border-bottom">
+            <span>Device Id : <span class="text-white">3c9e4b6d4772dae9</span></span>
+            <span class="icon" style="cursor: pointer;" onclick="alert('Device ID Copied!')">📋</span>
+        </div>
+        <div class="menu-item">
+            <span>Notification Setting : <span style="color:#00ffcc; font-weight:bold;">GRANTED</span></span>
+        </div>
+    </div>
+
+    <div class="section-title">INFO ABOUT YOU</div>
+    <div class="menu-box">
+        <a href="earning.html"><div class="menu-item border-bottom"><div class="left-content"><span class="icon">💸</span> My Earnings</div><span class="arrow">❯</span></div></a>
+        <a href="leads.html"><div class="menu-item border-bottom"><div class="left-content"><span class="icon">📄</span> My Leads</div><span class="arrow">❯</span></div></a>
+        <a href="add-bank.html"><div class="menu-item"><div class="left-content"><span class="icon">🏦</span> Add Bank</div><span class="arrow">❯</span></div></a>
+    </div> 
+
+    <div class="section-title">KYC DETAIL</div>
+    <div class="menu-box" id="kyc-details-box">
+        <div class="menu-item border-bottom"><div class="left-content"><span class="icon">🪪</span> PAN :</div><span class="value text-white" id="kyc-pan">Not Provided</span></div>
+        <div class="menu-item border-bottom"><div class="left-content"><span class="icon">🪪</span> Aadhaar :</div><span class="value text-white" id="kyc-aadhaar">Not Provided</span></div>
+        <div class="menu-item border-bottom"><div class="left-content"><span class="icon">⚧</span> Gender :</div><span class="value text-white" id="kyc-gender">Not Provided</span></div>
+        <div class="menu-item border-bottom"><div class="left-content"><span class="icon">🎂</span> DOB :</div><span class="value text-white" id="kyc-dob">Not Provided</span></div>
+        <div class="menu-item border-bottom"><div class="left-content"><span class="icon">💼</span> Occupation :</div><span class="value text-white" id="kyc-occ">Not Provided</span></div>
+        <div class="menu-item address-item"><div class="left-content"><span class="icon">📍</span> Full Address :</div><span class="value address-text" id="kyc-addr">Not Provided</span></div>
+    </div>
+    
+    <div class="section-title">OTHER LINKS</div>
+    <div class="menu-box" style="margin-bottom: 20px;">
+        <div class="menu-item" onclick="handleLogout()" style="cursor: pointer;">
+            <div class="left-content"><span class="icon" style="color:#ff3333;">🚪</span> <span style="color:#ff3333;">Logout</span></div>
+            <span class="arrow">❯</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let savedName = localStorage.getItem("userName");
+        if(savedName) document.getElementById("profileName").innerText = savedName.toUpperCase();
+
+        let savedMobile = localStorage.getItem("userMobile");
+        if(savedMobile) document.getElementById("mobileText").innerText = savedMobile; 
+        if(localStorage.getItem("mobileVerified") === "true") {
+            const mBadge = document.getElementById("mobileBadge");
+            mBadge.innerText = "VERIFIED"; mBadge.className = "badge verified"; mBadge.onclick = null;
+        }
+
+        let savedEmail = localStorage.getItem("userEmail");
+        if(savedEmail) document.getElementById("emailText").innerText = savedEmail; 
+        if(localStorage.getItem("emailVerified") === "true") {
+            const eBadge = document.getElementById("emailBadge");
+            eBadge.innerText = "VERIFIED"; eBadge.className = "badge verified"; eBadge.onclick = null;
+        }
+
+        if(localStorage.getItem("kycVerified") === "true") {
+            const kBadge = document.getElementById("kycBadge");
+            kBadge.innerText = "VERIFIED"; kBadge.className = "badge verified"; kBadge.onclick = null; 
+            document.getElementById("kyc-pan").innerText = localStorage.getItem("kycPan") || "";
+            document.getElementById("kyc-aadhaar").innerText = localStorage.getItem("kycAadhaar") || "[Aadhaar Redacted]"; 
+            document.getElementById("kyc-gender").innerText = localStorage.getItem("kycGender") || "";
+            document.getElementById("kyc-dob").innerText = localStorage.getItem("kycDob") || "";
+            document.getElementById("kyc-occ").innerText = localStorage.getItem("kycOcc") || "";
+            document.getElementById("kyc-addr").innerText = localStorage.getItem("kycAddr") || "";
+        }
+    });
+
+    // ==========================================
+    // 1. WhatsApp OTP API (Green API)
+    // ==========================================
+    function sendWhatsAppOTP() {
+        let mobile = prompt("আপনার 10 ডিজিটের WhatsApp নম্বরটি দিন:");
+        
+        if(mobile && mobile.length === 10) {
+            let generatedOTP = Math.floor(1000 + Math.random() * 9000);
+            
+            const idInstance = "7107660368";
+            const apiTokenInstance = "1a2a95fb8d324d599be9c4b4e714ae4f1233f74a0c4842a19f";
+            const url = `https://api.greenapi.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
+            
+            const payload = {
+                chatId: "91" + mobile + "@c.us",
+                message: `*EarnPe Security*\n\nHello, your WhatsApp verification OTP is: *${generatedOTP}*\n\nPlease do not share this code with anyone.`
+            };
+
+            alert("Please wait, WhatsApp-এ OTP পাঠানো হচ্ছে...");
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.idMessage) {
+                    let userOtp = prompt(`সফলভাবে OTP পাঠানো হয়েছে! আপনার WhatsApp চেক করে 4-ডিজিটের OTP টি লিখুন:`);
+                    if(userOtp == generatedOTP) {
+                        localStorage.setItem("userMobile", mobile);
+                        localStorage.setItem("mobileVerified", "true");
+                        alert("WhatsApp Verified Successfully!");
+                        location.reload();
+                    } else {
+                        alert("ভুল OTP! ভেরিফিকেশন ব্যর্থ হয়েছে।");
+                    }
+                } else {
+                    alert("WhatsApp-এ মেসেজ পাঠানো যায়নি। নম্বরটি কি সঠিক?");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("সার্ভার বা API সমস্যা! পরে আবার চেষ্টা করুন।");
+            });
+            
+        } else if(mobile) {
+            alert("অনুগ্রহ করে সঠিক ১০ ডিজিটের নম্বর দিন!");
+        }
+    }
+
+    // ==========================================
+    // 2. EMAIL OTP API (EmailJS)
+    // ==========================================
+    function sendEmailOTP() {
+        let email = prompt("আপনার ইমেইল অ্যাড্রেসটি দিন:");
+        
+        if(email && email.includes("@")) {
+            let generatedOTP = Math.floor(1000 + Math.random() * 9000);
+            
+            const serviceID = "service_11uwyad";
+            const templateID = "template_9aoxkgp";
+
+            var templateParams = {
+                to_email: email,
+                otp_code: generatedOTP,
+                reply_to: "support@earnpe.com"
+            };
+
+            emailjs.send(serviceID, templateID, templateParams)
+            .then(function(response) {
+                let userOtp = prompt(`সফলভাবে OTP পাঠানো হয়েছে! আপনার ${email} ইনবক্স চেক করে OTP টি লিখুন:`);
+                if(userOtp == generatedOTP) {
+                    localStorage.setItem("userEmail", email);
+                    localStorage.setItem("emailVerified", "true");
+                    alert("Email Verified Successfully!");
+                    location.reload();
+                } else {
+                    alert("ভুল OTP! ভেরিফিকেশন ব্যর্থ হয়েছে।");
+                }
+            }, function(error) {
+                alert("আপনার EmailJS API Key/Template ঠিকমতো সেটআপ করা নেই।");
+            });
+
+        } else if(email) {
+            alert("অনুগ্রহ করে সঠিক ইমেইল দিন!");
+        }
+    }
+
+    // ==========================================
+    // 3. Aadhaar Verification (Demo OTP API)
+    // ==========================================
+    function verifyAadhaar() {
+        let aadhaarNum = prompt("আপনার ১২ ডিজিটের আধার (Aadhaar) নম্বরটি দিন:");
+        
+        if(aadhaarNum && aadhaarNum.length === 12 && !isNaN(aadhaarNum)) {
+            let generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            
+            alert(`Please wait, UIDAI সার্ভারের সাথে কানেক্ট করা হচ্ছে...`);
+            
+            setTimeout(() => {
+                let userOtp = prompt(`সফলভাবে আপনার আধার লিঙ্ক করা মোবাইল নম্বরে OTP পাঠানো হয়েছে!\n\n[টেস্টিং এর জন্য ডেমো OTP: ${generatedOTP}]\n\nঅনুগ্রহ করে ৬-ডিজিটের OTP টি লিখুন:`);
+                
+                if(userOtp == generatedOTP) {
+                    let maskedAadhaar = "XXXXXXXX" + aadhaarNum.slice(-4);
+                    
+                    localStorage.setItem("kycAadhaar", maskedAadhaar);
+                    localStorage.setItem("kycVerified", "true");
+                    
+                    alert("✅ Aadhaar KYC Verified Successfully!");
+                    location.reload();
+                } else if (userOtp) {
+                    alert("❌ ভুল OTP! আধার ভেরিফিকেশন ব্যর্থ হয়েছে।");
+                }
+            }, 2000);
+            
+        } else if(aadhaarNum) {
+            alert("⚠️ অনুগ্রহ করে সঠিক ১২ ডিজিটের নম্বর দিন!");
+        }
+    }
+
+    function handleLogout() {
+        if(confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "login.html";
+        }
+    }
+</script>
+<script src="language.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+/* Basic Setup */
+body { margin: 0; padding: 0; background-color: #000; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; }
+.app-container { width: 100%; max-width: 400px; min-height: 100vh; position: relative; }
+
+/* Header */
+.page-header { display: flex; align-items: center; padding: 20px; }
+.back-btn { color: white; text-decoration: none; font-size: 20px; margin-right: 20px; }
+.page-header h2 { margin: 0; font-size: 20px; font-weight: bold; flex-grow: 1; text-align: center; padding-right: 30px; }
+
+/* Tabs */
+.tabs-container { display: flex; justify-content: space-around; border-bottom: 1px solid #333; margin-bottom: 20px; }
+.tab { padding: 10px 0; font-size: 13px; color: #888; font-weight: bold; cursor: pointer; flex-grow: 1; text-align: center; }
+.tab.active { color: #fff; border-bottom: 3px solid #b366ff; }
+
+/* Earn Card */
+.earn-card { background-color: #1a1a1a; margin: 0 15px 20px; border-radius: 15px; padding: 20px; text-align: center; }
+.earn-card h3 { margin: 0 0 15px; font-size: 16px; color: #fff; }
+.earn-amount { font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+.rupee { color: #00ffcc; }
+.coin { color: #ffcc00; }
+.earn-desc { font-size: 12px; color: #ffcc00; margin: 0 0 10px; font-weight: bold; }
+.offer-status { font-size: 12px; color: #00ffcc; margin: 0 0 20px; font-weight: bold; }
+
+/* Timing Boxes */
+.timing-boxes { display: flex; gap: 15px; }
+.time-box { flex: 1; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+.time-box span { font-size: 10px; font-weight: bold; color: #000; }
+.time-box strong { font-size: 14px; color: #fff; }
+.tracking { background-color: #ff3366; }
+.confirm { background-color: #ffcc00; }
+
+/* Sticky Share Button */
+.share-btn-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 360px; z-index: 100; }
+.share-btn { width: 100%; background-color: #00ffcc; color: #000; border: none; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,255,204,0.3); }
+.share-btn i { margin-right: 8px; }

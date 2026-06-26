@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Card - EarnPe</title>
+    <link rel="stylesheet" href="demat-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas লাইব্রেরি (কার্ড ডাউনলোড করার জন্য) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .id-container { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+
+        /* ID Card Base Design */
+        .id-card {
+            width: 320px;
+            background: linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
+            border: 2px solid #00ffcc;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        /* ফিতা লাগানোর ছিদ্র (Lanyard Hole) */
+        .lanyard-hole {
+            width: 60px;
+            height: 8px;
+            background: #000;
+            border-radius: 10px;
+            margin: 15px auto 10px auto;
+            border: 2px solid #333;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* কার্ডের উপরের অংশ */
+        .id-top {
+            background: #00ffcc;
+            color: #000;
+            padding: 15px 0 40px 0;
+            text-align: center;
+            font-weight: 900;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+        }
+
+        /* ইউজারের ছবি */
+        .id-photo-container {
+            text-align: center;
+            margin-top: -45px;
+            position: relative;
+            z-index: 2;
+        }
+        .id-photo {
+            width: 100px;
+            height: 100px;
+            background: #2b2b36;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 55px;
+            border: 4px solid #1c1c1c;
+            box-shadow: 0 0 0 3px #00ffcc;
+            overflow: hidden; /* ছবি গোল রাখার জন্য */
+        }
+        
+        /* আপলোড করা ছবির স্টাইল */
+        .id-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ইউজারের তথ্য */
+        .id-user-info { text-align: center; padding: 15px 20px 5px 20px; }
+        .id-name { color: #fff; font-size: 22px; font-weight: bold; margin: 0 0 5px 0; text-transform: uppercase;}
+        .id-role { color: #ffcc00; font-size: 13px; margin: 0 0 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* বিস্তারিত তথ্যের তালিকা */
+        .id-details { padding: 0 20px 20px 20px; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #333;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #888; font-weight: bold; }
+        .detail-value { color: #e0e0e0; font-weight: bold; text-align: right;}
+
+        /* নিচের অংশ ও বারকোড */
+        .id-footer { background: #111; text-align: center; padding: 15px; border-top: 1px solid #333; }
+        .barcode {
+            height: 35px;
+            width: 80%;
+            background: repeating-linear-gradient(90deg, #fff, #fff 2px, #000 2px, #000 4px, #fff 4px, #fff 5px, #000 5px, #000 9px, #fff 9px, #fff 11px, #000 11px, #000 14px);
+            margin: 0 auto 5px auto;
+            border-radius: 2px;
+        }
+        .footer-text { font-size: 10px; color: #666; margin-top: 5px; }
+
+        /* বাটন স্টাইল */
+        .upload-btn {
+            background: #2b2b36;
+            color: #fff;
+            border: 1px solid #00ffcc;
+            width: 100%;
+            max-width: 320px;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .upload-btn:active { transform: scale(0.98); background: #333; }
+
+        .download-btn {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            width: 100%;
+            max-width: 320px;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .download-btn:active { transform: scale(0.98); }
+        .notice { font-size: 12px; color: #888; margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="index.html" class="back-btn" style="text-decoration: none;">❮</a>
+        <h2>Identity Card</h2>
+    </div>
+
+    <div class="id-container">
+        
+        <!-- The ID Card -->
+        <div class="id-card" id="identityCard">
+            <div class="lanyard-hole"></div>
+            
+            <div class="id-top">
+                EarnPe
+            </div>
+
+            <div class="id-photo-container">
+                <!-- এখানে ডিফল্ট ইমোজি আছে, ছবি আপলোড করলে এটা রিপ্লেস হবে -->
+                <div class="id-photo" id="profilePic">👨🏻‍🦰</div>
+            </div>
+
+            <div class="id-user-info">
+                <h2 class="id-name">FAKAR UDDIN</h2>
+                <p class="id-role">Authorized Partner</p>
+            </div>
+
+            <div class="id-details">
+                <div class="detail-row">
+                    <span class="detail-label">ID No:</span>
+                    <span class="detail-value">OCMC1JB1QH</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Mobile:</span>
+                    <span class="detail-value">+91-8099259792</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">DOB:</span>
+                    <span class="detail-value">01-01-2004</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Blood Group:</span>
+                    <span class="detail-value" style="color: #ff4d4d;">O+</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Valid Till:</span>
+                    <span class="detail-value">Dec 2026</span>
+                </div>
+            </div>
+
+            <div class="id-footer">
+                <div class="barcode"></div>
+                <div class="footer-text">Scan to verify identity</div>
+            </div>
+        </div>
+
+        <!-- Upload Image Option -->
+        <label for="imageUpload" class="upload-btn">
+            <i class="fa-solid fa-camera"></i> UPLOAD PROFILE PHOTO
+        </label>
+        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+
+        <!-- Download Button -->
+        <button class="download-btn" onclick="downloadID()">
+            <i class="fa-solid fa-download"></i> DOWNLOAD ID CARD
+        </button>
+
+        <p class="notice">Always carry your digital ID Card to build customer trust while pitching financial products.</p>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // পেজ লোড হওয়ার সময় সেভ করা ছবি চেক করা
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedImage = localStorage.getItem('earnpe_saved_profile_pic');
+        if (savedImage) {
+            document.getElementById('profilePic').innerHTML = `<img src="${savedImage}" alt="Profile">`;
+        }
+    });
+
+    // ==========================================
+    // ছবি আপলোড করে কার্ডে বসানো এবং সেভ করার লজিক
+    // ==========================================
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // সাইজ চেক করা (খুব বড় ছবি হলে ব্রাউজার সেভ করতে দেয় না, তাই একটি লিমিট রাখা ভালো)
+            if (file.size > 2 * 1024 * 1024) { // 2MB Limit
+                alert("Please upload a picture smaller than 2MB.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                
+                // ছবি রিড করে id-photo কন্টেইনারে বসিয়ে দেওয়া
+                document.getElementById('profilePic').innerHTML = `<img src="${base64Image}" alt="Profile">`;
+                
+                // পরবর্তী সময়ের জন্য ছবিটিকে লোকাল স্টোরেজে সেভ করে রাখা
+                try {
+                    localStorage.setItem('earnpe_saved_profile_pic', base64Image);
+                } catch (error) {
+                    console.log("Image too large to save locally.");
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ==========================================
+    // আইডি কার্ড ডাউনলোড করার লজিক (Blob Method)
+    // ==========================================
+    function downloadID() {
+        const cardElement = document.getElementById("identityCard");
+        const downloadBtn = document.querySelector(".download-btn");
+        
+        // বাটন টেক্সট পরিবর্তন
+        downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> GENERATING...';
+        
+        html2canvas(cardElement, {
+            backgroundColor: "#0a0a0a", 
+            scale: 3, // হাই কোয়ালিটি ইমেজ
+            useCORS: true // যদি প্রোফাইল পিকচার অন্য সোর্স থেকে আসে
+        }).then(canvas => {
+            canvas.toBlob(function(blob) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.style.display = 'none';
+                link.href = url;
+                link.download = 'EarnPe_ID_Card.png';
+                
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fa-solid fa-check"></i> SAVED TO GALLERY!';
+                    setTimeout(() => {
+                        downloadBtn.innerHTML = '<i class="fa-solid fa-download"></i> DOWNLOAD ID CARD';
+                    }, 2000);
+                }, 500);
+            }, 'image/png');
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details</title>
+    <link rel="stylesheet" href="task-detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .bottom-action-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 380px; z-index: 100; display: flex; gap: 10px; }
+        .share-btn { flex: 1; background-color: #2b2b36; color: #00ffcc; border: 1px solid #00ffcc; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .start-btn { flex: 2; background-color: #00ffcc; color: #000; border: none; padding: 15px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,255,204,0.3); width: 100%; }
+        
+        .info-list { text-align: left; font-size: 14px; line-height: 1.6; padding-left: 20px; color: #ddd; }
+        .info-list li { margin-bottom: 10px; }
+        .faq-box { text-align: left; font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 15px; }
+        .faq-box strong { color: #00ffcc; display: block; margin-bottom: 5px; }
+
+        .submit-form label { display: block; color: #ccc; margin-bottom: 5px; font-size: 14px; text-align: left; }
+        .submit-form input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; }
+        
+        .submit-form input[type="file"] { padding: 10px; background: #1a1a24; cursor: pointer; border: 1px dashed #00ffcc; color: #00ffcc; }
+        
+        .submit-proof-btn { width: 100%; background: #00ffcc; color: #000; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .submit-proof-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div id="loading-screen" style="text-align: center; color: #00ffcc; margin-top: 50px;">
+    <h2>Loading Details...</h2>
+</div>
+
+<div class="app-container" id="main-content" style="display: none;">
+    <div class="page-header" style="display: flex; align-items: center; justify-content: center; position: relative; padding: 20px;">
+        <a href="javascript:history.back()" class="back-btn" style="text-decoration: none; position: absolute; left: 20px;">❮</a>
+        <img id="header-logo" src="" alt="Logo" style="width: 30px; height: 30px; border-radius: 6px; margin-right: 10px; display: none; object-fit: cover;">
+        <h2 id="header-title" style="margin: 0;">App Name</h2>
+    </div>
+
+    <div class="tabs-container" style="display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 20px; border-bottom: 1px solid #333; -ms-overflow-style: none; scrollbar-width: none;">
+        <div class="tab active" data-target="section-benefits" id="t-benefits">BENEFITS</div>
+        <div class="tab" data-target="section-how-to-earn" id="t-howToEarn">HOW TO EARN</div>
+        <div class="tab" data-target="section-faqs" id="t-faq">FAQ</div>
+        <div class="tab" data-target="section-submit" id="t-submitProof" style="color: #ffcc00;">SUBMIT PROOF</div>
+    </div>
+
+    <div class="earn-card content-section" id="section-benefits">
+        <h3>How much you will earn ?</h3>
+        <div class="earn-amount">
+            <span class="rupee">₹ <span id="detail-amount">0</span></span> + <span class="coin">🪙 <span id="detail-coin">0</span></span>
+        </div>
+        <p class="earn-desc" id="detail-desc">Description goes here</p>
+        <p class="offer-status">🕒 Offer is active now!</p>
+        <div class="timing-boxes">
+            <div class="time-box tracking"><span>Tracking<br>Time :</span><strong>24 Hours</strong></div>
+            <div class="time-box confirm"><span>Confirm<br>Time :</span><strong>7 Days</strong></div>
+        </div>
+    </div>
+
+    <div class="earn-card content-section" id="section-how-to-earn" style="display: none;">
+        <h3 id="t-stepsTask" style="margin-bottom: 15px; color: #ffcc00;">Steps to Complete Task</h3>
+        <ul class="info-list">
+            <li id="t-step1">Click on the <strong>Start Task</strong> button below.</li>
+            <li id="t-step2">Download the app and install it on your phone.</li>
+            <li id="t-step3">Register a new account using your mobile number.</li>
+            <li id="t-step4">Take a screenshot of the successful registration page.</li>
+            <li id="t-step5">Go to the <strong>SUBMIT PROOF</strong> tab and upload details!</li>
+        </ul>
+    </div>
+
+    <div class="earn-card content-section" id="section-faqs" style="display: none;">
+        <h3 id="t-faqTitle" style="margin-bottom: 15px; color: #ffcc00;">Frequently Asked Questions</h3>
+        <div class="faq-box"><strong>Q: When will my task be tracked?</strong><br>A: It usually takes up to 24-48 hours.</div>
+    </div>
+
+    <div class="earn-card content-section" id="section-submit" style="display: none;">
+        <h3 id="t-submitTitle" style="margin-bottom: 15px; color: #ffcc00;">Submit Task For Approval</h3>
+        <p id="t-submitDesc" style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Provide your registered details and upload a screenshot of completion.</p>
+        
+        <form id="submit-lead-form" class="submit-form">
+            <label id="t-labelUserId">Your User ID or Email</label>
+            <input type="text" id="lead-user-id" placeholder="Enter your app Email/ID" required>
+            
+            <label id="t-labelMobile">Registered Mobile Number</label>
+            <input type="text" id="lead-proof" placeholder="e.g. 9876543210" required>
+            
+            <label id="t-labelUpload">Upload Screenshot (Proof)</label>
+            <input type="file" id="lead-screenshot" accept="image/*" required>
+            
+            <button type="submit" class="submit-proof-btn" id="submitBtn">Submit Proof</button>
+        </form>
+        <div id="lead-status-msg" style="text-align: center; margin-top: 15px; font-weight: bold; font-size: 14px;"></div>
+    </div>
+
+    <div style="height: 80px;"></div>
+
+    <div class="bottom-action-bar">
+        <button class="share-btn"><i class="fa-solid fa-share-nodes"></i> Share</button>
+        <a id="task-link" href="#" target="_blank" style="flex: 2; text-decoration: none;">
+            <button class="start-btn">Start Task <i class="fa-solid fa-arrow-right"></i></button>
+        </a>
+    </div>
+</div>
+
+<script>
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('.content-section');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            sections.forEach(sec => sec.style.display = 'none');
+            tab.classList.add('active');
+            const targetId = tab.getAttribute('data-target');
+            document.getElementById(targetId).style.display = 'block';
+        });
+    });
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+        authDomain: "earnpe-ca9d8.firebaseapp.com",
+        projectId: "earnpe-ca9d8",
+        storageBucket: "earnpe-ca9d8.firebasestorage.app",
+        messagingSenderId: "305792608968",
+        appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const IMGBB_API_KEY = "b48766c1e1ba911ee20d7104e627f46c"; 
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const offerId = urlParams.get('id');
+
+    async function loadOfferDetails() {
+        if (!offerId) return;
+        const docSnap = await getDoc(doc(db, "offers", offerId));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('header-title').innerText = data.name;
+            document.getElementById('detail-amount').innerText = data.amount;
+            document.getElementById('detail-coin').innerText = data.coin;
+            document.getElementById('detail-desc').innerText = data.description;
+            document.getElementById('task-link').href = data.link;
+            if(data.logo) {
+                const logoImg = document.getElementById('header-logo');
+                logoImg.src = data.logo;
+                logoImg.style.display = "block";
+            }
+            document.getElementById('loading-screen').style.display = "none";
+            document.getElementById('main-content').style.display = "block";
+        }
+    }
+    loadOfferDetails();
+
+    const leadForm = document.getElementById('submit-lead-form');
+    leadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = document.getElementById('lead-screenshot').files[0];
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Submitting...";
+
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+        const data = await res.json();
+        
+        await addDoc(collection(db, "leads"), {
+            offerId: offerId,
+            userId: document.getElementById('lead-user-id').value,
+            submittedProof: document.getElementById('lead-proof').value,
+            screenshotUrl: data.data.url,
+            status: "pending",
+            timestamp: new Date()
+        });
+        alert("Success! Proof submitted.");
+        leadForm.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Proof";
+    });
+</script>
+<script src="language.js"></script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnpe App UI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- সিকিউরিটি চেক: লগইন না থাকলে হোমপেজে ঢুকতে দেবে না -->
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+  
+<div class="app-container">
+    <div class="header">
+        <button class="icon-btn" id="menu-btn">≡</button>
+        <div class="header-icons">
+            <button class="icon-btn" id="open-lang-btn">A/অ</button>
+            <a href="notification.html" class="icon-btn" style="text-decoration: none;">🔔</a>
+        </div>
+    </div>
+
+    <!-- User Info & Balance Section -->
+    <div class="user-info">
+        <div>
+            <h4><a href="admin.html" id="t-hello" style="text-decoration: none; color: inherit;">Hello</a></h4>
+            <h3 id="profileName">FAKAR UDDIN</h3>
+            <p id="t-greeting">Hope you have a good day! 😊</p>
+        </div>
+        <a href="redeem.html" style="text-decoration: none; color: inherit;">
+            <div class="balance">
+                <p id="t-balance">Account Balance</p>
+                <span>₹ 0.00</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="coins-card">
+        <h3 id="t-coins">Total Earning Coins</h3>
+        <div class="coins-amount">
+            <span class="coin-icon">C</span> 00
+        </div>
+    </div>
+
+    <div class="marquee">
+        <marquee scrollamount="4">Have at least one confirmed lead in the past 30 days.</marquee>
+    </div>
+
+    <div class="section-title">
+        <span id="t-app-status">Application Status</span>
+        <a href="leads.html" id="t-lead-action">Lead Action >></a>
+    </div>
+
+    <div class="status-grid">
+        <div class="status-card" onclick="window.location.href='leads.html?tab=confirm'" style="cursor: pointer;">
+            <div class="status-icon confirm-icon">✓</div>
+            <div class="status-text">
+                <h2 id="confirm-count">0</h2>
+                <p id="t-confirm">Confirm</p>
+            </div>
+        </div>
+        <div class="status-card" onclick="window.location.href='leads.html?tab=pending'" style="cursor: pointer;">
+            <div class="status-icon pending-icon">⌛</div>
+            <div class="status-text">
+                <h2 id="pending-count">0</h2>
+                <p id="t-pending">Pending</p>
+            </div>
+        </div>
+        <div class="status-card" onclick="window.location.href='leads.html?tab=rejected'" style="cursor: pointer;">
+            <div class="status-icon rejected-icon">✕</div>
+            <div class="status-text">
+                <h2 id="rejected-count">0</h2>
+                <p id="t-rejected">Rejected</p>
+            </div>
+        </div>
+        <div class="status-card" onclick="window.location.href='leads.html?tab=expired'" style="cursor: pointer;">
+            <div class="status-icon expired-icon">!</div>
+            <div class="status-text">
+                <h2 id="expired-count">0</h2>
+                <p id="t-expired">Expired</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span id="t-sell">Sell & Earn</span>
+    </div>
+   <div class="categories">
+        <a href="demat.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">📈</div>
+            <span>Demat Acc...</span>
+        </a>
+        <a href="savings.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">🐷</div>
+            <span>Savings Acc...</span>
+        </a>
+        <a href="loan.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">💰</div>
+            <span>Loan</span>
+        </a>
+        <a href="investment.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">📊</div>
+            <span>Investment</span>
+        </a>
+        <a href="credit-card.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">💳</div>
+            <span>Credit Card</span>
+        </a>
+        <a href="crypto.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">🪙</div>
+            <span>Crypto</span>
+        </a>
+        <a href="others.html" class="category-item" style="text-decoration: none; color: inherit;">
+            <div class="category-icon">🗂️</div>
+            <span>Others</span>
+        </a>
+    </div>
+
+    <div class="section-title">
+        <span id="t-toolkit">My Toolkit</span>
+    </div>
+    <div class="toolkit-container">
+        <a href="id-card.html" style="text-decoration: none; color: inherit;">
+            <div class="toolkit-item">
+                <div class="toolkit-icon">🪪</div>
+                <span>Id-Card</span>
+            </div>
+        </a>
+        <a href="visiting-card.html" style="text-decoration: none; color: inherit;">
+            <div class="toolkit-item">
+                <div class="toolkit-icon">📇</div>
+                <span>Visiting Card</span>
+            </div>
+        </a>
+        <a href="refer.html" style="text-decoration: none; color: inherit;">
+            <div class="toolkit-item">
+                <div class="toolkit-icon">👥</div>
+                <span>Refer & Earn</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="community-section">
+        <h3 id="t-community">Be a part of EarnPe community</h3>
+        <div class="social-icons">
+            <a href="https://t.me/s/Earnpe1" target="_blank" class="social-icon"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/earnpeofficial?igsh=MWpjN2NuYjhmbm14OQ==" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+        <div class="make-in-india">
+            <div class="monuments">🕌 🏛️ 🏯 ✈️</div>
+            <p>Make In India</p>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="coins.html" class="nav-item active" style="text-decoration: none;">
+            <div class="icon">🪙</div>
+            <span id="t-nav-coins">My Coins</span>
+        </a>
+        <a href="leads.html" class="nav-item" style="text-decoration: none;">
+            <div class="icon">📄</div>
+            <span id="t-nav-leads">Leads</span>
+        </a>
+        <a href="earning.html" class="nav-item" style="text-decoration: none;">
+            <div class="icon">💸</div>
+            <span id="t-nav-earning">My Earning</span>
+        </a>
+        <a href="account.html" class="nav-item" style="text-decoration: none;">
+            <div class="icon">👤</div>
+            <span id="t-nav-account">Account</span>
+        </a>
+    </div>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-profile-card">
+        <div class="profile-top">
+            <div class="sidebar-avatar">👨🏻‍🦰</div>
+            <div class="profile-details">
+                <h3>FAKAR UDDIN</h3>
+                <p>+91-8099259792</p>
+            </div>
+        </div>
+        <div class="profile-email">
+            <span class="icon">✉️</span> FAKAR384@GMAIL.COM
+        </div>
+    </div>
+    <h3 class="activities-title">Activities</h3>
+    <div class="activities-box">
+        <a href="account.html" class="activity-item">
+            <div class="left"><span class="icon">👤</span> My Account</div>
+            <span class="arrow">›</span>
+        </a>
+        <a href="earning.html" class="activity-item">
+            <div class="left"><span class="icon">💸</span> My Earnings</div>
+            <span class="arrow">›</span>
+        </a>
+        <a href="leads.html" class="activity-item">
+            <div class="left"><span class="icon">📄</span> My Leads</div>
+            <span class="arrow">›</span>
+        </a>
+        <a href="help.html" class="activity-item">
+            <div class="left"><span class="icon">❓</span> Help and Support</div>
+            <span class="arrow">›</span>
+        </a>
+        <a href="about.html" class="activity-item">
+            <div class="left"><span class="icon">📱</span> About and Contact Us</div>
+            <span class="arrow">›</span>
+        </a>
+        <a href="privacy.html" class="activity-item border-none">
+            <div class="left"><span class="icon">🛡️</span> Privacy Policy</div>
+            <span class="arrow">›</span>
+        </a>
+    </div>
+    <div class="logout-section">
+        <hr>
+        <button class="logout-btn-sidebar">Logout</button>
+    </div>
+</div>
+
+<div class="lang-overlay" id="lang-overlay"></div>
+<div class="lang-bottom-sheet" id="lang-sheet">
+    <div class="lang-header">
+        <p>Change your language to</p>
+        <button class="close-btn" id="close-lang-btn">✕</button>
+    </div>
+    <div class="lang-options">
+        <div class="lang-item active-lang" data-lang="en">
+            <span class="lang-icon" style="background:#ffb3b3; color:#000;">▼EN</span> English
+        </div>
+        <div class="lang-item" data-lang="hi">
+            <span class="lang-icon" style="background:#fff; color:#000;">▼हिं</span> Hindi
+        </div>
+        <div class="lang-item" data-lang="bn">
+            <span class="lang-icon" style="background:#00ffcc; color:#000;">▼বা</span> Bengali
+        </div>
+        <div class="lang-item" data-lang="as">
+            <span class="lang-icon" style="background:#ffb3b3;">▼অ</span> Assamese
+        </div>
+        <div class="lang-item" data-lang="mr">
+            <span class="lang-icon" style="background:#f4a460; color:#000;">▼म</span> Marathi
+        </div>
+        <div class="lang-item" data-lang="ta">
+            <span class="lang-icon" style="background:#dda0dd; color:#000;">▼த</span> Tamil
+        </div>
+        <div class="lang-item" data-lang="gu">
+            <span class="lang-icon" style="background:#87ceeb; color:#000;">▼ગુ</span> Gujarati
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     গুরুত্বপূর্ণ নোটিশ পপআপ 
+=============================================== -->
+<div id="notice-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#1c1c1c; padding:25px; border-radius:15px; width:85%; max-width:400px; border:1px solid #00ffcc; text-align:center; box-shadow: 0 10px 30px rgba(0,255,204,0.2);">
+        <i class="fa-solid fa-circle-exclamation" style="font-size:40px; color:#ffcc00; margin-bottom:15px;"></i>
+        <h3 style="color:#fff; margin-bottom:15px; font-size: 20px;">Important Notice</h3>
+        <p id="noticeText" style="color:#ccc; font-size:14px; margin-bottom:25px; line-height:1.5;">
+            <!-- অ্যাডমিনের লেখা এখানে আসবে -->
+        </p>
+        <button onclick="closeNotice()" style="background:#00ffcc; color:#000; border:none; padding:12px 30px; border-radius:25px; font-weight:bold; cursor:pointer; width: 100%;">OK, UNDERSTOOD</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // ভাষা পরিবর্তনের (Translation) ডিকশনারি ও লজিক
+    // ==========================================
+    const translations = {
+        en: { hello: "Hello", greeting: "Hope you have a good day! 😊", balance: "Account Balance", coins: "Total Earning Coins", appStatus: "Application Status", leadAction: "Lead Action >>", confirm: "Confirm", pending: "Pending", rejected: "Rejected", expired: "Expired", sell: "Sell & Earn", toolkit: "My Toolkit", community: "Be a part of EarnPe community", navCoins: "My Coins", navLeads: "Leads", navEarning: "My Earning", navAccount: "Account" },
+        bn: { hello: "হ্যালো", greeting: "আপনার দিনটি শুভ হোক! 😊", balance: "অ্যাকাউন্ট ব্যালেন্স", coins: "মোট অর্জিত কয়েন", appStatus: "অ্যাপ্লিকেশনের অবস্থা", leadAction: "লিড অ্যাকশন >>", confirm: "কনফার্ম", pending: "পেন্ডিং", rejected: "রিজেক্টেড", expired: "এক্সপায়ার্ড", sell: "সেল এবং আর্ন", toolkit: "আমার টুলকিট", community: "EarnPe সম্প্রদায়ের অংশ হোন", navCoins: "আমার কয়েন", navLeads: "লিডস", navEarning: "আমার আয়", navAccount: "অ্যাকাউন্ট" },
+        hi: { hello: "नमस्ते", greeting: "आपका दिन शुभ हो! 😊", balance: "खाता शेष", coins: "कुल कमाई के सिक्के", appStatus: "आवेदन की स्थिति", leadAction: "लीड एक्शन >>", confirm: "कन्फर्म", pending: "पेंडिंग", rejected: "रिजेक्टेड", expired: "एक्सपायर्ड", sell: "सेल एंड अर्न", toolkit: "माई टूलकिट", community: "EarnPe समुदाय का हिस्सा बनें", navCoins: "मेरे सिक्के", navLeads: "लीड्स", navEarning: "मेरी कमाई", navAccount: "अकाउंट" },
+        as: { hello: "নমস্কাৰ", greeting: "আপোনাৰ দিনটো শুভ হওক! 😊", balance: "একাউণ্ট বেলেঞ্চ", coins: "মুঠ উপাৰ্জন কৰা মুদ্ৰা", appStatus: "আবেদনৰ স্থিতি", leadAction: "লিড একচন >>", confirm: "নিশ্চিত", pending: "বকেয়া", rejected: "প্ৰত্যাখ্যান", expired: "ম্যাদ উকলি যোৱা", sell: "বিক্ৰী আৰু উপাৰ্জন", toolkit: "মোৰ টুলকিট", community: "EarnPe সম্প্ৰদায়ৰ অংশ হওক", navCoins: "মোৰ মুদ্ৰা", navLeads: "লিডছ", navEarning: "মোৰ উপাৰ্জন", navAccount: "একাউণ্ট" },
+        mr: { hello: "नमस्कार", greeting: "तुमचा दिवस चांगला जावो! 😊", balance: "खाते शिल्लक", coins: "एकूण कमाईची नाणी", appStatus: "अर्जाची स्थिती", leadAction: "लीड ॲक्शन >>", confirm: "निश्चित", pending: "प्रलंबित", rejected: "नाकारले", expired: "कालबाह्य", sell: "विक्री आणि कमाई", toolkit: "माझे टूलकिट", community: "EarnPe समुदायाचा भाग व्हा", navCoins: "माझी नाणी", navLeads: "लीड्स", navEarning: "माझी कमाई", navAccount: "खाते" },
+        ta: { hello: "வணக்கம்", greeting: "உங்கள் நாள் இனிதாக அமையட்டும்! 😊", balance: "கணக்கு இருப்பு", coins: "மொத்த நாணயங்கள்", appStatus: "விண்ணப்ப நிலை", leadAction: "லீட் ஆக்‌ஷன் >>", confirm: "உறுதி", pending: "நிலுவையில்", rejected: "நிராகரிக்கப்பட்டது", expired: "காலாவதியானது", sell: "விற்பனை", toolkit: "கருவித்தொகுப்பு", community: "EarnPe சமூகத்தில் இணையுங்கள்", navCoins: "நாணயங்கள்", navLeads: "லீட்ஸ்", navEarning: "வருமானம்", navAccount: "கணக்கு" },
+        gu: { hello: "નમસ્તે", greeting: "તમારો દિવસ શુભ રહે! 😊", balance: "ખાતાની સિલક", coins: "કુલ કમાણીના સિક્કા", appStatus: "અરજીની સ્થિતિ", leadAction: "લીડ એક્શન >>", confirm: "પુષ્ટિ થયેલ", pending: "બાકી", rejected: "નકારવામાં આવેલ", expired: "સમાપ્ત થયેલ", sell: "વેચાણ અને કમાણી", toolkit: "મારી ટૂલકીટ", community: "EarnPe સમુદાયનો ભાગ બનો", navCoins: "મારા સિક્કા", navLeads: "લીડ્સ", navEarning: "મારી કમાણી", navAccount: "એકાઉન્ટ" }
+    };
+
+    function applyTranslation(lang) {
+        const t = translations[lang] || translations['en'];
+        
+        document.getElementById('t-hello').innerText = t.hello;
+        document.getElementById('t-greeting').innerText = t.greeting;
+        document.getElementById('t-balance').innerText = t.balance;
+        document.getElementById('t-coins').innerText = t.coins;
+        document.getElementById('t-app-status').innerText = t.appStatus;
+        document.getElementById('t-lead-action').innerText = t.leadAction;
+        document.getElementById('t-confirm').innerText = t.confirm;
+        document.getElementById('t-pending').innerText = t.pending;
+        document.getElementById('t-rejected').innerText = t.rejected;
+        document.getElementById('t-expired').innerText = t.expired;
+        document.getElementById('t-sell').innerText = t.sell;
+        document.getElementById('t-toolkit').innerText = t.toolkit;
+        document.getElementById('t-community').innerText = t.community;
+        document.getElementById('t-nav-coins').innerText = t.navCoins;
+        document.getElementById('t-nav-leads').innerText = t.navLeads;
+        document.getElementById('t-nav-earning').innerText = t.navEarning;
+        document.getElementById('t-nav-account').innerText = t.navAccount;
+
+        document.querySelectorAll('.lang-item').forEach(l => l.classList.remove('active-lang'));
+        const activeItem = document.querySelector(`.lang-item[data-lang="${lang}"]`);
+        if(activeItem) activeItem.classList.add('active-lang');
+    }
+
+    // --- Sidebar JavaScript ---
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // --- Language Sheet JavaScript ---
+    const openLangBtn = document.getElementById('open-lang-btn');
+    const langSheet = document.getElementById('lang-sheet');
+    const langOverlay = document.getElementById('lang-overlay');
+    const closeLangBtn = document.getElementById('close-lang-btn');
+    const langItems = document.querySelectorAll('.lang-item'); 
+
+    openLangBtn.addEventListener('click', () => {
+        langSheet.classList.add('active');
+        langOverlay.classList.add('active');
+    });
+    const closeLanguageSheet = () => {
+        langSheet.classList.remove('active');
+        langOverlay.classList.remove('active');
+    };
+    closeLangBtn.addEventListener('click', closeLanguageSheet);
+    langOverlay.addEventListener('click', closeLanguageSheet);
+
+    langItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const selectedLang = item.getAttribute('data-lang');
+            localStorage.setItem('appLanguage', selectedLang); 
+            applyTranslation(selectedLang); 
+            closeLanguageSheet();
+        });
+    });
+
+    // --- Logout Function ---
+    const logoutBtn = document.querySelector('.logout-btn-sidebar');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem("isLoggedIn"); 
+            window.location.href = "login.html"; 
+        });
+    }
+
+    // ===============================================
+    // পেজ লোড হওয়ার পর ডায়নামিক ডেটা বসানোর কোড
+    // ===============================================
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem('appLanguage') || 'en';
+        applyTranslation(savedLang);
+
+        let savedBalance = localStorage.getItem('mainBalance') || "0.00";
+        const balanceElement = document.querySelector('.balance span');
+        if (balanceElement) {
+            balanceElement.innerText = '₹ ' + savedBalance;
+        }
+
+        let savedName = localStorage.getItem("userName");
+        if(savedName) {
+            document.getElementById("profileName").innerText = savedName.toUpperCase();
+        }
+
+        document.getElementById('confirm-count').innerText = localStorage.getItem('confirmLeads') || "0";
+        document.getElementById('pending-count').innerText = localStorage.getItem('pendingLeads') || "0";
+        document.getElementById('rejected-count').innerText = localStorage.getItem('rejectedLeads') || "0";
+        document.getElementById('expired-count').innerText = localStorage.getItem('expiredLeads') || "0";
+    });
+
+    // ডিফল্ট নোটিশ বন্ধ করার ফাংশন (ফায়ারবেস লোড হওয়ার আগে কাজ করবে)
+    window.closeNotice = function() {
+        document.getElementById("notice-overlay").style.display = "none";
+    };
+</script>
+
+<!-- Firebase Notice Fetch Script -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+        authDomain: "earnpe-ca9d8.firebaseapp.com",
+        projectId: "earnpe-ca9d8",
+        storageBucket: "earnpe-ca9d8.firebasestorage.app",
+        messagingSenderId: "305792608968",
+        appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function checkLatestNotice() {
+        try {
+            // শুধুমাত্র গ্লোবাল নোটিশগুলো চেক করবে (type == 'global')
+            const q = query(
+                collection(db, "notifications"), 
+                where("type", "==", "global"),
+                orderBy("createdAt", "desc"), 
+                limit(1)
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const latestDoc = querySnapshot.docs[0];
+                const noticeData = latestDoc.data();
+                const noticeId = latestDoc.id;
+
+                // চেক করা হচ্ছে આই নোটিশটি আগে দেখা হয়েছে কি না
+                const readNotices = JSON.parse(localStorage.getItem("readNotices")) || [];
+                
+                if (!readNotices.includes(noticeId)) {
+                    document.getElementById("noticeText").innerText = noticeData.message; 
+                    document.getElementById("notice-overlay").style.display = "flex";
+
+                    // OK বাটনে ক্লিক করলে নোটিশটি Read হিসেবে সেভ হবে
+                    window.closeNotice = function() {
+                        document.getElementById("notice-overlay").style.display = "none";
+                        readNotices.push(noticeId);
+                        localStorage.setItem("readNotices", JSON.stringify(readNotices));
+                    };
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching notice for popup:", error);
+        }
+    }
+
+    checkLatestNotice();
+</script>
+<script src="language.js"></script>
+
+</body>
+</html>

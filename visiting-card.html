@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visiting Card - EarnPe</title>
+    <link rel="stylesheet" href="demat-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas লাইব্রেরি (কার্ড ডাউনলোড করার জন্য) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .vc-container { padding: 20px; text-align: center; }
+
+        /* Visiting Card Design */
+        .card-wrapper {
+            background: linear-gradient(135deg, #0a0a0a, #1c1c1c);
+            border: 2px solid #00ffcc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
+        }
+
+        /* কার্ডের ভেতরের ব্যাকগ্রাউন্ড ডিজাইন */
+        .card-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 50%;
+        }
+
+        .brand-name { color: #00ffcc; font-size: 22px; font-weight: bold; margin-bottom: 5px; }
+        .designation { color: #888; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; }
+        
+        .user-name { font-size: 26px; font-weight: bold; margin-bottom: 5px; color: #fff; text-transform: uppercase;}
+        .user-role { color: #ffcc00; font-size: 14px; margin-bottom: 20px; }
+
+        .contact-info { display: flex; align-items: center; margin-bottom: 10px; font-size: 14px; color: #ccc;}
+        .contact-info i { color: #00ffcc; margin-right: 15px; font-size: 16px; width: 20px; text-align: center;}
+
+        /* Action Buttons */
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        
+        .download-btn, .share-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .download-btn { background: #00ffcc; color: #000; }
+        .share-btn { background: #1c1c1c; border: 1px solid #00ffcc; color: #00ffcc; }
+
+        .notice { font-size: 12px; color: #888; margin-top: 20px; line-height: 1.5;}
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="index.html" class="back-btn" style="text-decoration: none;">❮</a>
+        <h2>Visiting Card</h2>
+    </div>
+
+    <div class="vc-container">
+        <!-- The Card (এই অংশটি ইমেজ হিসেবে ডাউনলোড হবে) -->
+        <div class="card-wrapper" id="visitingCard">
+            <div class="brand-name">EarnPe</div>
+            <div class="designation">Authorized Partner</div>
+
+            <div class="user-name">FAKAR UDDIN</div>
+            <div class="user-role">Independent Financial Consultant</div>
+
+            <div class="contact-info">
+                <i class="fa-solid fa-phone"></i> +91-8099259792
+            </div>
+            <div class="contact-info">
+                <i class="fa-solid fa-envelope"></i> FAKAR384@GMAIL.COM
+            </div>
+            <div class="contact-info">
+                <i class="fa-solid fa-id-badge"></i> Reg No: OCMC1JB1QH
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-group">
+            <button class="download-btn" onclick="downloadCard()">
+                <i class="fa-solid fa-download"></i> Download
+            </button>
+            <button class="share-btn" onclick="shareCard()">
+                <i class="fa-solid fa-share-nodes"></i> Share
+            </button>
+        </div>
+
+        <p class="notice">Share your digital visiting card with customers to build trust and grow your network.</p>
+    </div>
+</div>
+
+<script>
+    // কার্ড ইমেজ হিসেবে ডাউনলোড করার ফাংশন
+    function downloadCard() {
+        const cardElement = document.getElementById("visitingCard");
+        const downloadBtn = document.querySelector(".download-btn");
+        
+        // বাটন টেক্সট পরিবর্তন
+        downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        
+        html2canvas(cardElement, {
+            backgroundColor: "#0a0a0a", // কালো ব্যাকগ্রাউন্ড ফিক্স
+            scale: 3 // হাই কোয়ালিটি ইমেজ
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'EarnPe_Visiting_Card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // আগের টেক্সটে ফিরে যাওয়া
+            setTimeout(() => {
+                downloadBtn.innerHTML = '<i class="fa-solid fa-check"></i> Saved!';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download';
+                }, 2000);
+            }, 500);
+        });
+    }
+
+    // কার্ড শেয়ার করার ফাংশন
+    function shareCard() {
+        const shareText = `Hello! I am FAKAR UDDIN, an Authorized Partner at EarnPe.\n\nLet's connect!\n📞 +91-8099259792\n📧 FAKAR384@GMAIL.COM\n🌐 Join me: https://your-website.com`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: 'My Visiting Card',
+                text: shareText,
+            }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(shareText);
+            alert('Contact details copied! Paste it anywhere to share.');
+        }
+    }
+</script>
+
+</body>
+</html>

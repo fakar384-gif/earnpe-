@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Offer - EarnPe Admin</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0a; color: #fff; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background-color: #111; border-bottom: 1px solid #333; }
+        .header h3 { margin: 0; color: #ffcc00; font-size: 20px; }
+        .back-btn { background: #333; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 14px; }
+        .back-btn:hover { background: #444; }
+
+        .container { max-width: 600px; margin: 30px auto; padding: 25px; background: #111; border-radius: 10px; border: 1px solid #333; }
+        .container h2 { margin-top: 0; color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; color: #ccc; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; box-sizing: border-box; font-size: 14px; background-color: #222; color: #fff; }
+        
+        .submit-btn { width: 100%; background-color: #ffcc00; color: #000; border: none; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .submit-btn:hover { background-color: #e6b800; }
+        
+        #status-msg { text-align: center; font-weight: bold; margin-top: 15px; font-size: 14px; }
+        #loading-text { text-align: center; color: #00ffcc; font-size: 16px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h3>Edit Task/Offer</h3>
+        <a href="admin.html" class="back-btn">❮ Back to Dashboard</a>
+    </div>
+
+    <div id="loading-text">Loading Offer Data...</div>
+
+    <div class="container" id="form-container" style="display: none;">
+        <h2>Update Information</h2>
+        <form id="edit-form">
+            <div class="form-group">
+                <label>App/Offer Name</label>
+                <input type="text" id="edit-name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Company Logo URL</label>
+                <input type="url" id="edit-logo" placeholder="e.g. https://example.com/logo.png">
+                <p style="margin: 5px 0 0; font-size: 12px; color: #888;">If you don't have a logo, leave it empty or add a new link.</p>
+            </div>
+
+            <div class="form-group">
+                <label>Select Category</label>
+                <select id="edit-category" required>
+                    <option value="demat">Demat Account</option>
+                    <option value="savings">Savings Account</option>
+                    <option value="loan">Loan</option>
+                    <option value="investment">Investment</option>
+                    <option value="credit-card">Credit Card</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="edit-desc" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>App/Offer Link (URL)</label>
+                <input type="url" id="edit-link" required>
+            </div>
+
+            <div class="form-group">
+                <label>Reward Amount (₹)</label>
+                <input type="number" id="edit-amount" required>
+            </div>
+
+            <div class="form-group">
+                <label>Coin Amount</label>
+                <input type="number" id="edit-coin" required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="updateBtn">Update Offer</button>
+        </form>
+        <div id="status-msg"></div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOSS89xSmSm3ijgVk5ydyccEh8wSJjn0k",
+        authDomain: "earnpe-ca9d8.firebaseapp.com",
+        projectId: "earnpe-ca9d8",
+        storageBucket: "earnpe-ca9d8.firebasestorage.app",
+        messagingSenderId: "305792608968",
+        appId: "1:305792608968:web:f91054c2a2b7dac4fc93fd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // URL থেকে আইডি নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+    const offerId = urlParams.get('id');
+
+    const formContainer = document.getElementById('form-container');
+    const loadingText = document.getElementById('loading-text');
+    const statusMsg = document.getElementById('status-msg');
+    const updateBtn = document.getElementById('updateBtn');
+
+    if (!offerId) {
+        loadingText.style.color = "red";
+        loadingText.innerText = "Error: Invalid Offer ID!";
+    } else {
+        loadOfferData();
+    }
+
+    async function loadOfferData() {
+        try {
+            const docRef = doc(db, "offers", offerId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+
+                // ফর্মে আগের ডাটাগুলো বসিয়ে দেওয়া
+                document.getElementById('edit-name').value = data.name || "";
+                document.getElementById('edit-logo').value = data.logo || "";
+                document.getElementById('edit-category').value = data.category || "demat";
+                document.getElementById('edit-desc').value = data.description || "";
+                document.getElementById('edit-link').value = data.link || "";
+                document.getElementById('edit-amount').value = data.amount || 0;
+                document.getElementById('edit-coin').value = data.coin || 0;
+
+                loadingText.style.display = "none";
+                formContainer.style.display = "block";
+            } else {
+                loadingText.style.color = "red";
+                loadingText.innerText = "Error: Offer not found in database!";
+            }
+        } catch (error) {
+            console.error(error);
+            loadingText.style.color = "red";
+            loadingText.innerText = "Error loading data! Please check internet.";
+        }
+    }
+
+    // আপডেট করার লজিক
+    document.getElementById('edit-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        updateBtn.innerText = "Updating...";
+        updateBtn.disabled = true;
+        statusMsg.style.color = "#00ffcc";
+        statusMsg.innerText = "Saving changes to database...";
+
+        try {
+            const docRef = doc(db, "offers", offerId);
+            await updateDoc(docRef, {
+                name: document.getElementById('edit-name').value,
+                logo: document.getElementById('edit-logo').value, 
+                category: document.getElementById('edit-category').value,
+                description: document.getElementById('edit-desc').value,
+                link: document.getElementById('edit-link').value,
+                amount: Number(document.getElementById('edit-amount').value),
+                coin: Number(document.getElementById('edit-coin').value)
+            });
+
+            statusMsg.style.color = "#00ffcc";
+            statusMsg.innerText = "Success! Offer updated perfectly.";
+            updateBtn.innerText = "Update Offer";
+            updateBtn.disabled = false;
+            
+            // একটু পরে অ্যাডমিন ড্যাশবোর্ডে ফেরত পাঠানো
+            setTimeout(() => {
+                window.location.href = "admin.html";
+            }, 1500);
+
+        } catch (error) {
+            console.error(error);
+            statusMsg.style.color = "#ff4d4d";
+            statusMsg.innerText = "Error updating data: " + error.message;
+            updateBtn.innerText = "Update Offer";
+            updateBtn.disabled = false;
+        }
+    });
+
+</script>
+
+</body>
+</html>

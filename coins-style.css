@@ -1,0 +1,51 @@
+/* Basic Setup */
+body { margin: 0; padding: 0; background-color: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; }
+.app-container { width: 100%; max-width: 400px; min-height: 100vh; padding-bottom: 20px; }
+
+/* Header */
+.page-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; }
+.back-btn { color: white; text-decoration: none; font-size: 20px; }
+.page-header h2 { margin: 0; font-size: 18px; font-weight: 600; flex-grow: 1; margin-left: 15px; }
+.faq-btn { border: 1px solid #00ffcc; color: #00ffcc; text-decoration: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+
+/* Total Coins */
+.total-coins-section { text-align: center; margin-top: 10px; border-bottom: 1px solid #333; margin: 0 20px; padding-bottom: 20px; }
+.gold-coins-icon { font-size: 50px; margin-bottom: 10px; }
+.total-coins-section p { margin: 0; color: #ccc; font-size: 16px; }
+.total-coins-section h1 { margin: 5px 0 0; color: #00ffcc; font-size: 40px; }
+
+/* Redeem Action Bar */
+.redeem-action-bar { background-color: #1a1a1a; margin: 20px; padding: 12px 20px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; }
+.conversion-rate { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #ddd; }
+.coin-icon-small { background: #ffcc00; color: black; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; }
+.redeem-btn { background-color: #00ffcc; color: #000; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+
+/* Lead Conversion Card */
+.lead-conversion-card { background: linear-gradient(90deg, #ff4d94, #ff1a75); margin: 0 20px 25px; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; }
+.lead-conversion-card h4 { margin: 0 0 10px; font-size: 14px; font-weight: normal; }
+.lead-conversion-card h2 { margin: 0; font-size: 24px; }
+.card-icon { font-size: 40px; opacity: 0.8; }
+
+/* History Header */
+.history-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 15px; }
+.history-header h3 { margin: 0; font-size: 14px; }
+.history-header a { color: #00ffcc; text-decoration: none; font-size: 12px; }
+
+/* Tabs */
+.tabs-container { display: flex; margin: 0 20px; background-color: #1a1a1a; border-radius: 25px; overflow: hidden; }
+.tab-btn { flex: 1; padding: 12px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; }
+.tab-btn.active { background-color: #00ffcc; color: #000; }
+.tab-btn.inactive { background-color: transparent; color: #888; }
+.note-text { padding: 15px 20px; font-size: 12px; color: #ccc; }
+
+/* History List */
+.history-list { padding: 0 20px; display: flex; flex-direction: column; gap: 15px; }
+.history-item { background-color: #1a1a1a; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #ff4d94; }
+.item-left { display: flex; align-items: center; gap: 15px; }
+.brand-logo { background-color: white; color: red; font-weight: bold; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 5px; font-size: 10px; }
+.item-details h4 { margin: 0 0 5px; font-size: 14px; }
+.item-details p { margin: 0; font-size: 10px; color: #888; line-height: 1.4; }
+.item-right { text-align: right; }
+.coin-value { display: flex; align-items: center; justify-content: flex-end; gap: 5px; font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+.status { font-size: 10px; color: #888; }
+.status.confirmed b { color: #00ffcc; }

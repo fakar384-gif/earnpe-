@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leads - EarnPe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; }
+        .app-container { max-width: 500px; margin: 0 auto; background-color: #0a0a0a; min-height: 100vh; padding-bottom: 20px; }
+
+        /* Header Style */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #111;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .header-left { display: flex; align-items: center; }
+        .back-btn { color: #00ffcc; text-decoration: none; font-size: 20px; margin-right: 15px; font-weight: bold; }
+        .header-left h2 { margin: 0; font-size: 18px; }
+
+        /* Status Tabs */
+        .status-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .tab {
+            background: #1c1c1c; border: 1px solid #333; padding: 15px 10px; border-radius: 12px;
+            font-size: 14px; font-weight: bold; text-align: center; cursor: pointer; transition: 0.3s;
+        }
+        
+        /* Tab Colors & Active States */
+        .tab-confirm { border-bottom: 3px solid #00ffcc; color: #00ffcc; }
+        .tab-pending { border-bottom: 3px solid #ffcc00; color: #ffcc00; }
+        .tab-rejected { border-bottom: 3px solid #ff3333; color: #ff3333; }
+        .tab-expired { border-bottom: 3px solid #888; color: #888; }
+        
+        .tab.active { background: #2a2a2a; transform: scale(0.98); opacity: 1; }
+        .tab:not(.active) { opacity: 0.5; }
+
+        /* Lead List Styles */
+        .leads-list-container { padding: 0 20px; }
+        .lead-item {
+            background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px;
+            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .lead-info h3 { margin: 0 0 5px; color: #fff; font-size: 15px; }
+        .lead-info p { margin: 0; color: #888; font-size: 12px; }
+        .lead-amount { font-weight: bold; font-size: 16px; }
+        
+        .amt-confirm { color: #00ffcc; }
+        .amt-pending { color: #ffcc00; }
+        .amt-rejected { color: #ff3333; }
+        .amt-expired { color: #888; }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 40px 20px; color: #666; display: none; }
+        .empty-state i { font-size: 50px; margin-bottom: 15px; color: #222; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn">❮</a>
+            <h2>My Leads</h2>
+        </div>
+    </div>
+
+    <div class="status-tabs">
+        <div class="tab tab-confirm active" onclick="showLeads('confirm')">Confirm</div>
+        <div class="tab tab-pending" onclick="showLeads('pending')">Pending</div>
+        <div class="tab tab-rejected" onclick="showLeads('rejected')">Rejected</div>
+        <div class="tab tab-expired" onclick="showLeads('expired')">Expired</div>
+    </div>
+
+    <div class="leads-list-container" id="leads-container">
+        <!-- ইউজারের লিডস এখানে ডায়নামিকভাবে আসবে -->
+    </div>
+
+    <div class="empty-state" id="empty-state">
+        <i class="fa-solid fa-box-open"></i>
+        <p>No leads found in this category.</p>
+    </div>
+</div>
+
+<script>
+    // ডামি ডেটা মুছে ফেলা হয়েছে। 
+    // এখন ইউজারের কমপ্লিট করা টাস্ক লোকাল স্টোরেজ (বা ডাটাবেস) থেকে লোড হবে।
+    // যদি কোনো টাস্ক না থাকে, তবে ডিফল্টভাবে এটি খালি (Empty Array) থাকবে।
+    let allLeads = JSON.parse(localStorage.getItem('myLeads')) || [];
+
+    // পেজ লোড হলে URL থেকে চেক করবে কোন ট্যাবে ক্লিক করা হয়েছে
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('tab') || 'confirm'; // ডিফল্ট 'confirm'
+        showLeads(activeTab);
+    });
+
+    // লিস্ট এবং ট্যাব দেখানোর ফাংশন
+    function showLeads(statusType) {
+        // সব ট্যাব থেকে active ক্লাস সরিয়ে দেওয়া
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        
+        // যে ট্যাবে ক্লিক করা হয়েছে, সেটিকে active করা
+        document.querySelector(`.tab-${statusType}`).classList.add('active');
+
+        const container = document.getElementById('leads-container');
+        const emptyState = document.getElementById('empty-state');
+        container.innerHTML = ""; // আগের লিস্ট মুছে ফেলা
+
+        // ফিল্টার করা: শুধু সিলেক্ট করা স্ট্যাটাসের ডেটা বের করা
+        const filteredLeads = allLeads.filter(lead => lead.status === statusType);
+
+        if (filteredLeads.length > 0) {
+            emptyState.style.display = "none";
+            
+            // লিস্ট তৈরি করা
+            filteredLeads.forEach(lead => {
+                const leadDiv = document.createElement('div');
+                leadDiv.className = "lead-item";
+                leadDiv.innerHTML = `
+                    <div class="lead-info">
+                        <h3>${lead.name}</h3>
+                        <p>Date: ${lead.date}</p>
+                    </div>
+                    <div class="lead-amount amt-${lead.status}">
+                        ${lead.status === 'rejected' || lead.status === 'expired' ? 'Failed' : lead.amount}
+                    </div>
+                `;
+                container.appendChild(leadDiv);
+            });
+        } else {
+            // ডেটা না থাকলে Empty State দেখাবে
+            emptyState.style.display = "block";
+        }
+    }
+</script>
+<script src="language.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* Basic Setup */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #000000;
+    min-height: 100vh;
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.back-btn {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+}
+.header-left h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Header Right Icons */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.filter-btn {
+    background-color: transparent;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+.filter-btn span {
+    color: #00ffcc;
+}
+.icon-btn-small {
+    background-color: transparent;
+    border: 1px solid #333;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Status Tabs */
+.status-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+    overflow-x: auto;
+}
+.status-tabs::-webkit-scrollbar {
+    display: none; /* স্ক্রলবার লুকানোর জন্য */
+}
+.tab {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    color: #bbb;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Action Button */
+.action-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 20px;
+}
+.click-action-btn {
+    color: #00ffcc;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Warning Note */
+.warning-note {
+    color: #ffcc00;
+    font-size: 14px;
+    padding: 15px 20px;
+    line-height: 1.5;
+}

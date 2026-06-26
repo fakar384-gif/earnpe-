@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem Balance</title>
+    <link rel="stylesheet" href="demat-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .redeem-container {
+            padding: 20px;
+            text-align: center;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #1c1c1c, #2b2b36);
+            border: 1px solid #00ffcc;
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+        }
+        .balance-card h3 {
+            margin: 0;
+            color: #888;
+            font-size: 16px;
+        }
+        .balance-amount {
+            font-size: 40px;
+            font-weight: bold;
+            color: #00ffcc;
+            margin: 10px 0;
+        }
+        .input-group {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group span {
+            font-size: 20px;
+            color: #888;
+            margin-right: 10px;
+        }
+        .input-group input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+            font-size: 18px;
+            outline: none;
+        }
+        .redeem-btn {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .redeem-btn:hover {
+            background: #00ccaa;
+        }
+        .notice {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="page-header">
+        <a href="index.html" class="back-btn" style="text-decoration: none;">❮</a>
+        <h2>Redeem</h2>
+    </div>
+
+    <div class="redeem-container">
+        <div class="balance-card">
+            <h3>Available Balance</h3>
+            <div class="balance-amount">₹ 0</div> </div>
+
+        <div class="input-group">
+            <span>₹</span>
+            <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw">
+        </div>
+
+        <button class="redeem-btn" id="withdrawBtn" onclick="processWithdraw()">WITHDRAW</button>
+        <p id="message" style="font-size: 14px; margin-top: 15px;"></p>
+
+        <p class="notice">
+            * Minimum withdrawal limit is ₹250.<br>
+            * Money will be transferred to your linked bank account within 24 hours.
+        </p>
+    </div>
+</div>
+
+<script>
+    function processWithdraw() {
+        const amountInput = document.getElementById("withdrawAmount").value;
+        const msgElement = document.getElementById("message");
+        const availableBalance = 0; // ব্যালেন্স ০ করা হয়েছে
+
+        if (!amountInput || amountInput <= 0) {
+            msgElement.style.color = "red";
+            msgElement.innerText = "Please enter a valid amount.";
+            return;
+        }
+
+        if (amountInput < 100) {
+            msgElement.style.color = "red";
+            msgElement.innerText = "Minimum withdrawal amount is ₹100.";
+            return;
+        }
+
+        if (amountInput > availableBalance) {
+            msgElement.style.color = "red";
+            msgElement.innerText = "Insufficient balance!";
+            return;
+        }
+
+        // Processing Animation
+        document.getElementById("withdrawBtn").innerText = "PROCESSING...";
+        document.getElementById("withdrawBtn").disabled = true;
+
+        setTimeout(() => {
+            msgElement.style.color = "#00ffcc";
+            msgElement.innerText = "Withdrawal request submitted successfully!";
+            document.getElementById("withdrawBtn").innerText = "WITHDRAW";
+            document.getElementById("withdrawBtn").disabled = false;
+            document.getElementById("withdrawAmount").value = "";
+        }, 2000);
+    }
+</script>
+<script src="language.js"></script>
+</body>
+</html>

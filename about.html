@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About & Contact - EarnPe</title>
+    <link rel="stylesheet" href="demat-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000; color: #fff; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .app-container { max-width: 100%; margin: 0 auto; padding-bottom: 40px; }
+        
+        /* Header */
+        .page-header { padding: 20px; border-bottom: 1px solid #222; display: flex; align-items: center; gap: 15px; background-color: #0a0a0a; position: sticky; top: 0; z-index: 10; }
+        .back-btn { text-decoration: none; color: #fff; font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .page-header h2 { margin: 0; color: #00ffcc; font-size: 22px; }
+
+        .content-section { padding: 20px; }
+        
+        /* About Logo Area */
+        .about-header { text-align: center; margin-bottom: 30px; margin-top: 10px; }
+        .app-logo { 
+            width: 80px; height: 80px; 
+            background: #2b2b36; 
+            border: 2px solid #00ffcc; 
+            border-radius: 20px; 
+            display: inline-flex; justify-content: center; align-items: center; 
+            font-size: 35px; color: #00ffcc; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2); 
+        }
+        .about-header h3 { margin: 0; font-size: 26px; letter-spacing: 1px; font-weight: 900; }
+        .about-header p { margin: 5px 0 0; color: #888; font-size: 13px; font-weight: bold; }
+
+        /* Info Cards */
+        .info-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .info-card h4 { margin: 0 0 10px 0; color: #00ffcc; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .info-card p { margin: 0; color: #aaa; font-size: 14px; line-height: 1.6; }
+
+        /* Social Links */
+        .social-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .social-btn { 
+            background: #222; border: 1px solid #333; 
+            padding: 12px; border-radius: 8px; 
+            text-align: center; text-decoration: none; 
+            color: #fff; font-size: 14px; font-weight: bold; 
+            transition: 0.3s; 
+            display: flex; justify-content: center; align-items: center; gap: 8px; 
+        }
+        .social-btn:active { transform: scale(0.95); background: #333; }
+        .social-btn i { font-size: 18px; }
+        .btn-telegram { color: #0088cc; }
+        .btn-youtube { color: #ff0000; }
+        .btn-instagram { color: #E1306C; }
+        .btn-facebook { color: #1877F2; }
+
+        /* Contact Form */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #ccc; margin-bottom: 5px; font-size: 13px; font-weight: bold; }
+        .form-group input, .form-group textarea { 
+            width: 100%; padding: 12px; border: 1px solid #444; 
+            border-radius: 8px; box-sizing: border-box; 
+            font-size: 14px; background-color: #222; color: #fff; font-family: inherit; 
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #00ffcc; }
+        .submit-btn { 
+            width: 100%; background-color: #00ffcc; color: #000; 
+            border: none; padding: 14px; border-radius: 8px; 
+            font-size: 15px; font-weight: bold; cursor: pointer; 
+            transition: 0.3s; margin-top: 5px; 
+        }
+        .submit-btn:active { transform: scale(0.98); background-color: #00ccaa; }
+        
+        .divider { height: 1px; background: #333; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Header -->
+    <div class="page-header">
+        <a href="index.html" class="back-btn">❮</a>
+        <h2>About & Contact</h2>
+    </div>
+
+    <div class="content-section">
+        
+        <!-- About Header -->
+        <div class="about-header">
+            <div class="app-logo">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <h3>EARNPE</h3>
+            <p>Version 1.0.0 (Pro)</p>
+        </div>
+
+        <!-- About Info -->
+        <div class="info-card">
+            <h4><i class="fa-solid fa-circle-info"></i> About Us</h4>
+            <p>EarnPe is India's most trusted platform for financial affiliate marketing. Our mission is to empower individuals to earn a stable income directly from their smartphones by referring top-tier financial products like Demat accounts, Credit Cards, and Savings accounts.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Contact Options -->
+        <h3 style="color: #fff; font-size: 18px; margin-bottom: 15px;">Connect With Us</h3>
+        
+        <div class="info-card" style="padding: 15px;">
+            <p style="margin-bottom: 10px; color: #ccc;"><strong><i class="fa-solid fa-location-dot" style="color: #00ffcc;"></i> Office Address:</strong><br>Guwahati, Assam, India</p>
+            <p style="color: #ccc;"><strong><i class="fa-solid fa-envelope" style="color: #00ffcc;"></i> Email:</strong> support@earnpe.com</p>
+        </div>
+
+        <!-- Social Media Grid -->
+        <div class="social-grid">
+            <!-- আপনার সোশ্যাল মিডিয়া লিংকগুলো href-এ বসিয়ে দিন -->
+            <a href="https://t.me/your_telegram_channel" target="_blank" class="social-btn">
+                <i class="fa-brands fa-telegram btn-telegram"></i> Telegram
+            </a>
+            <a href="https://youtube.com/your_channel" target="_blank" class="social-btn">
+                <i class="fa-brands fa-youtube btn-youtube"></i> YouTube
+            </a>
+            <a href="https://instagram.com/your_page" target="_blank" class="social-btn">
+                <i class="fa-brands fa-instagram btn-instagram"></i> Instagram
+            </a>
+            <a href="https://facebook.com/your_page" target="_blank" class="social-btn">
+                <i class="fa-brands fa-facebook btn-facebook"></i> Facebook
+            </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Send Message Form -->
+        <h3 style="color: #fff; font-size: 18px; margin-bottom: 15px;">Send us a Message</h3>
+        <div class="info-card" style="background: transparent; border: none; padding: 0;">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="contactName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="contactEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>How can we help you?</label>
+                    <textarea id="contactMessage" rows="4" placeholder="Write your message here..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="sendBtn">
+                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Contact Form Logic
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('sendBtn');
+        const originalText = btn.innerHTML;
+        
+        // বাটন লোডিং স্টাইল
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+        btn.style.backgroundColor = '#333';
+        btn.style.color = '#fff';
+
+        // ২ সেকেন্ড পর সাকসেস মেসেজ দেখাবে
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Message Sent Successfully!';
+            btn.style.backgroundColor = '#25D366'; // WhatsApp Green Color
+            
+            document.getElementById('contactForm').reset();
+
+            // ৩ সেকেন্ড পর আগের অবস্থায় ফিরে যাবে
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.backgroundColor = '#00ffcc';
+                btn.style.color = '#000';
+            }, 3000);
+        }, 2000);
+    });
+</script>
+<script src="language.js"></script>
+</body>
+</html>
